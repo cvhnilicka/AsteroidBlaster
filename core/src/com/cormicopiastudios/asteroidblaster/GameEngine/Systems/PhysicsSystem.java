@@ -6,16 +6,21 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IntervalIteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.InputController;
 
 public class PhysicsSystem extends IntervalIteratingSystem {
 
     private static final float MAX_STEP_TIME = 1/45f;
 
     private World world;
+    private InputController controller;
     private Array<Entity> bodiesQueue;
 
     private ComponentMapper<B2BodyComponent> bm = ComponentMapper.getFor(B2BodyComponent.class);
@@ -23,9 +28,10 @@ public class PhysicsSystem extends IntervalIteratingSystem {
 
 
     @SuppressWarnings("unchecked")
-    public PhysicsSystem(World world) {
+    public PhysicsSystem(World world, InputController controller) {
         super(Family.all().get(), MAX_STEP_TIME);
         this.world = world;
+        this.controller = controller;
         this.bodiesQueue = new Array<Entity>();
     }
 
@@ -39,7 +45,23 @@ public class PhysicsSystem extends IntervalIteratingSystem {
             Vector2 pos = bodyComp.body.getPosition();
             tfm.position.x = pos.x;
             tfm.position.y = pos.y;
-            tfm.rotation = bodyComp.body.getAngle()* MathUtils.radiansToDegrees;
+            if (ent.getComponent(TypeComponent.class).type == TypeComponent.PLAYER) {
+                // get mouse location
+                Vector3 mosLoc = new Vector3(controller.mouseLocation.x, controller.mouseLocation.y, 0);
+                ent.getComponent(PlayerComponent.class).cam.unproject(mosLoc);
+
+                float rot = (float) Math.toDegrees(
+                        Math.atan2(mosLoc.y - pos.y,
+                                mosLoc.x-pos.x));
+                if (rot < 0) {
+                    rot += 360;
+                }
+                tfm.rotation = rot-90f;
+                bodyComp.body.setTransform(pos, MathUtils.degreesToRadians * tfm.rotation);
+//                bodyComp.body.setAngularVelocity((float)Math.toRadians(Math.atan2(mosLoc.y - pos.y, mosLoc.x-pos.x)));
+            } else {
+                tfm.rotation = bodyComp.body.getAngle() * MathUtils.radiansToDegrees;
+            }
         }
         bodiesQueue.clear();
 

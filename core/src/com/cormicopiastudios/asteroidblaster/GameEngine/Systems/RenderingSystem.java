@@ -109,7 +109,7 @@ public class RenderingSystem extends SortedIteratingSystem {
             float originX = width/2.f;
             float originY = height/2.f;
 
-            Gdx.app.log("RenderSystem", "Texture " + tex.texture.toString());
+//            Gdx.app.log("RenderSystem", "Texture " + tex.texture.toString());
 
 
 

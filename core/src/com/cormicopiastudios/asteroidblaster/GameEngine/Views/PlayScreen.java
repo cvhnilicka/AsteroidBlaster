@@ -58,7 +58,7 @@ public class PlayScreen implements Screen {
         this.gameMaster = gameMaster;
         // need to add/setup Keyboard Controller
         inputController = new InputController();
-        world = new World(new Vector2(0,-10.f),true);
+        world = new World(new Vector2(0,-0.f),true);
         world.setContactListener(new B2ContactListener(this));
 
         bodyFactory = BodyFactory.getInstance(world);
@@ -75,16 +75,18 @@ public class PlayScreen implements Screen {
 
         // lets add the systems. they run in the order you add them
         engine.addSystem(renderingSystem);
-        engine.addSystem(new PhysicsSystem(world));
+        engine.addSystem(new PhysicsSystem(world, inputController));
         engine.addSystem(new PhysicsDebugSystem(world, renderingSystem.getCamera()));
         engine.addSystem(new CollisionSystem());
         engine.addSystem(new PlayerControlSystem(inputController));
-
         createPlayer();
-
-
     }
 
+
+
+    /**
+     * Here lies the logic to create the player entity and add it to the engine
+     * */
     private void createPlayer() {
         // create the entity and all the components in it
         Entity entity = engine.createEntity();
@@ -105,6 +107,7 @@ public class PlayScreen implements Screen {
         typeComponent.type = TypeComponent.PLAYER;
         stateComponent.set(StateComponent.STATE_NORMAL);
         b2BodyComponent.body.setUserData(entity);
+        playerComponent.cam = gamecam;
 
         // add components to entity
         entity.add(b2BodyComponent);
@@ -118,6 +121,16 @@ public class PlayScreen implements Screen {
         // add to engine
         engine.addEntity(entity);
     }
+
+    /**
+     * I will need to add the code for adding in:
+     * - Asteroids
+     * - Walls
+     * - Shooting Stars
+     * */
+    // TODO private void addAsteroid()
+    // TODO private void assShootingStar()
+    // TODO private void addWalls()
 
     @Override
     public void show() {
