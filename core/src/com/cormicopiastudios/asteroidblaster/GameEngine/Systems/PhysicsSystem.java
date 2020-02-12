@@ -45,6 +45,8 @@ public class PhysicsSystem extends IntervalIteratingSystem {
             Vector2 pos = bodyComp.body.getPosition();
             tfm.position.x = pos.x;
             tfm.position.y = pos.y;
+            // **********************************************************
+            // I might need to move this chunk to the playercontrolsystem
             if (ent.getComponent(TypeComponent.class).type == TypeComponent.PLAYER) {
                 // get mouse location
                 Vector3 mosLoc = new Vector3(controller.mouseLocation.x, controller.mouseLocation.y, 0);
@@ -58,10 +60,10 @@ public class PhysicsSystem extends IntervalIteratingSystem {
                 }
                 tfm.rotation = rot-90f;
                 bodyComp.body.setTransform(pos, MathUtils.degreesToRadians * tfm.rotation);
-//                bodyComp.body.setAngularVelocity((float)Math.toRadians(Math.atan2(mosLoc.y - pos.y, mosLoc.x-pos.x)));
             } else {
                 tfm.rotation = bodyComp.body.getAngle() * MathUtils.radiansToDegrees;
             }
+            // **********************************************************
         }
         bodiesQueue.clear();
 
