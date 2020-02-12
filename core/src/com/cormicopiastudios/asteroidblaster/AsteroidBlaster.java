@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.AssetController;
+import com.cormicopiastudios.asteroidblaster.GameEngine.GameMaster;
 import com.cormicopiastudios.asteroidblaster.Menus.LoadingScreen;
 import com.cormicopiastudios.asteroidblaster.Menus.MainMenu;
 
@@ -21,6 +22,9 @@ public class AsteroidBlaster extends Game {
 	private MainMenu mainMenu;
 	public final static int MAINMENU = 2;
 
+	private GameMaster gameMaster;
+	public final static int GAME = 3;
+
 	private AssetController assetController;
 
 
@@ -33,6 +37,7 @@ public class AsteroidBlaster extends Game {
 			case MAINMENU: if (mainMenu == null) mainMenu = new MainMenu(this);
 			this.setScreen(mainMenu);
 			break;
+			case GAME: gameMaster = new GameMaster(this);
 		}
 	}
 
@@ -43,7 +48,9 @@ public class AsteroidBlaster extends Game {
 		Gdx.graphics.setWindowedMode(792,634);
 		assetController = new AssetController();
 		// need to add asset manager/load assets
-
+		assetController.queueAddImages();
+		assetController.queueMenuButtons();
+		assetController.manager.finishLoading();
 		// set screen to loading screen
 		changeScreen(LOADING);
 	}

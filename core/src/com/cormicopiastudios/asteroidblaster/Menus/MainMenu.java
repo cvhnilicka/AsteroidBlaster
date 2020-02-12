@@ -53,7 +53,7 @@ public class MainMenu implements Screen {
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-//                parent.changeScreen(AsteroidBlaster.GAME);
+                parent.changeScreen(AsteroidBlaster.GAME);
             }
         });
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.cormicopiastudios.asteroidblaster.AsteroidBlaster;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.AssetController;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Views.PlayScreen;
 
 public class GameMaster {
 
@@ -23,6 +24,7 @@ public class GameMaster {
     public GameMaster(AsteroidBlaster parent) {
         this.parent = parent;
         assetController = parent.getAssetController();
+        parent.setScreen(new PlayScreen(this));
     }
 
     public AssetController getAssetController() {
