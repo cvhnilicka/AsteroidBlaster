@@ -1,20 +1,45 @@
 package com.cormicopiastudios.asteroidblaster.GameEngine.Views;
 
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cormicopiastudios.asteroidblaster.AsteroidBlaster;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.CollisionComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StateComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TextureComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.AssetController;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.B2ContactListener;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.InputController;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.ModelController;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Factories.BodyFactory;
 import com.cormicopiastudios.asteroidblaster.GameEngine.GameMaster;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.CollisionSystem;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.PhysicsDebugSystem;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.PhysicsSystem;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.PlayerControlSystem;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.RenderingSystem;
 
 public class PlayScreen implements Screen {
 
     private GameMaster gameMaster;
+    private World world;
+    private BodyFactory bodyFactory;
+    private Engine engine;
 
     // camera
     private OrthographicCamera gamecam;
@@ -31,20 +56,67 @@ public class PlayScreen implements Screen {
 
     public PlayScreen(GameMaster gameMaster) {
         this.gameMaster = gameMaster;
-        batch = new SpriteBatch();
-        gamecam = new OrthographicCamera(GameMaster.V_WIDTH, GameMaster.V_HIEGHT);
-        batch.setProjectionMatrix(gamecam.combined);
-
         // need to add/setup Keyboard Controller
         inputController = new InputController();
+        world = new World(new Vector2(0,-10.f),true);
+        world.setContactListener(new B2ContactListener(this));
 
+        bodyFactory = BodyFactory.getInstance(world);
         // need to get assetmanager from asteroid blaster
         assetController = gameMaster.getAssetController();
-        // need to add/setup b2 model controller
-        modelController = new ModelController(this);
+
+        batch = new SpriteBatch();
+        RenderingSystem renderingSystem = new RenderingSystem(batch);
+        gamecam = renderingSystem.getCamera();
+        batch.setProjectionMatrix(gamecam.combined);
+
+        // create pooled engine
+        engine = new PooledEngine();
+
+        // lets add the systems. they run in the order you add them
+        engine.addSystem(renderingSystem);
+        engine.addSystem(new PhysicsSystem(world));
+        engine.addSystem(new PhysicsDebugSystem(world, renderingSystem.getCamera()));
+        engine.addSystem(new CollisionSystem());
+        engine.addSystem(new PlayerControlSystem(inputController));
+
+        createPlayer();
 
 
-        debugRenderer = new Box2DDebugRenderer(true,true,true,true,true,true);
+    }
+
+    private void createPlayer() {
+        // create the entity and all the components in it
+        Entity entity = engine.createEntity();
+        B2BodyComponent b2BodyComponent = engine.createComponent(B2BodyComponent.class);
+        TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
+        TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
+        PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
+        CollisionComponent collisionComponent = engine.createComponent(CollisionComponent.class);
+        TypeComponent typeComponent = engine.createComponent(TypeComponent.class);
+        StateComponent stateComponent = engine.createComponent(StateComponent.class);
+
+        // create the data for the components
+        b2BodyComponent.body = bodyFactory.makeBoxPolyBody(5,5,1,2,BodyFactory.FIXTURE_TYPE.STEEL, BodyDef.BodyType.DynamicBody,true);
+
+        // set object pos
+        transformComponent.position.set(10,10,0);
+        textureComponent.texture = assetController.manager.get(assetController.redShip);
+        typeComponent.type = TypeComponent.PLAYER;
+        stateComponent.set(StateComponent.STATE_NORMAL);
+        b2BodyComponent.body.setUserData(entity);
+
+        // add components to entity
+        entity.add(b2BodyComponent);
+        entity.add(transformComponent);
+        entity.add(textureComponent);
+        entity.add(playerComponent);
+        entity.add(collisionComponent);
+        entity.add(typeComponent);
+        entity.add(stateComponent);
+
+        // add to engine
+        engine.addEntity(entity);
     }
 
     @Override
@@ -55,7 +127,10 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        engine.update(delta);
     }
 
     @Override

@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.cormicopiastudios.asteroidblaster.AsteroidBlaster;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TextureComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.GameMaster;
 
 import java.util.Comparator;
 
@@ -94,16 +96,34 @@ public class RenderingSystem extends SortedIteratingSystem {
             TextureComponent tex = textureM.get(entity);
             TransformComponent trans = transformM.get(entity);
 
-            if (tex.region == null || trans.isHidden) {
+            if (trans.isHidden) {
                 continue;
             }
-            float width = tex.region.getRegionWidth();
-            float height = tex.region.getRegionHeight();
+
+            float width = tex.texture.getWidth()/10;
+            float height = tex.texture.getHeight()/10;
+
+//            float width = tex.region.getRegionWidth();
+//            float height = tex.region.getRegionHeight();
 
             float originX = width/2.f;
             float originY = height/2.f;
 
-            batch.draw(tex.region,
+            Gdx.app.log("RenderSystem", "Texture " + tex.texture.toString());
+
+
+
+//            batch.draw(tex.texture,
+//                    trans.position.x - originX,
+//                    trans.position.y - originY,
+//                    (int)originX,
+//                    (int)originY,
+//                    (int)width,
+//                    (int)height
+//            );
+
+
+            batch.draw(tex.texture,
                     trans.position.x - originX,
                     trans.position.y - originY,
                     originX,
@@ -112,7 +132,8 @@ public class RenderingSystem extends SortedIteratingSystem {
                     height,
                     PixelsToMeters(trans.scale.x),
                     PixelsToMeters(trans.scale.y),
-                    trans.rotation
+                    trans.rotation,
+                    0,0,tex.texture.getWidth(),tex.texture.getHeight(),false,false
             );
         }
 
