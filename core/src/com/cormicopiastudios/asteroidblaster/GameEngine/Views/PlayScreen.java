@@ -8,13 +8,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.cormicopiastudios.asteroidblaster.AsteroidBlaster;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.CollisionComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
@@ -26,6 +24,7 @@ import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.AssetControl
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.B2ContactListener;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.InputController;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.ModelController;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Factories.LevelFactory;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Factories.BodyFactory;
 import com.cormicopiastudios.asteroidblaster.GameEngine.GameMaster;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.CollisionSystem;
@@ -49,6 +48,7 @@ public class PlayScreen implements Screen {
     private InputController inputController;
     private ModelController modelController;
     private AssetController assetController;
+    private LevelFactory levelFactory;
 
 
     private SpriteBatch batch;
@@ -73,64 +73,19 @@ public class PlayScreen implements Screen {
         // create pooled engine
         engine = new PooledEngine();
 
+
         // lets add the systems. they run in the order you add them
         engine.addSystem(renderingSystem);
         engine.addSystem(new PhysicsSystem(world, inputController));
         engine.addSystem(new PhysicsDebugSystem(world, renderingSystem.getCamera()));
         engine.addSystem(new CollisionSystem());
         engine.addSystem(new PlayerControlSystem(inputController));
-        createPlayer();
+        levelFactory = new LevelFactory(world, (PooledEngine)engine, this);
     }
 
+    public AssetController getAssetController() { return this.assetController; }
+    public OrthographicCamera getGamecam() { return this.gamecam; }
 
-
-    /**
-     * Here lies the logic to create the player entity and add it to the engine
-     * */
-    private void createPlayer() {
-        // create the entity and all the components in it
-        Entity entity = engine.createEntity();
-        B2BodyComponent b2BodyComponent = engine.createComponent(B2BodyComponent.class);
-        TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
-        TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
-        PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
-        CollisionComponent collisionComponent = engine.createComponent(CollisionComponent.class);
-        TypeComponent typeComponent = engine.createComponent(TypeComponent.class);
-        StateComponent stateComponent = engine.createComponent(StateComponent.class);
-
-        // create the data for the components
-        b2BodyComponent.body = bodyFactory.makeBoxPolyBody(5,5,1,2,BodyFactory.FIXTURE_TYPE.STEEL, BodyDef.BodyType.DynamicBody,true);
-
-        // set object pos
-        transformComponent.position.set(10,10,0);
-        textureComponent.texture = assetController.manager.get(assetController.redShip);
-        typeComponent.type = TypeComponent.PLAYER;
-        stateComponent.set(StateComponent.STATE_NORMAL);
-        b2BodyComponent.body.setUserData(entity);
-        playerComponent.cam = gamecam;
-
-        // add components to entity
-        entity.add(b2BodyComponent);
-        entity.add(transformComponent);
-        entity.add(textureComponent);
-        entity.add(playerComponent);
-        entity.add(collisionComponent);
-        entity.add(typeComponent);
-        entity.add(stateComponent);
-
-        // add to engine
-        engine.addEntity(entity);
-    }
-
-    /**
-     * I will need to add the code for adding in:
-     * - Asteroids
-     * - Walls
-     * - Shooting Stars
-     * */
-    // TODO private void addAsteroid()
-    // TODO private void assShootingStar()
-    // TODO private void addWalls()
 
     @Override
     public void show() {
