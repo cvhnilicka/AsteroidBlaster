@@ -66,6 +66,8 @@ public class RenderingSystem extends SortedIteratingSystem {
         textureM = ComponentMapper.getFor(TextureComponent.class);
         transformM = ComponentMapper.getFor(TransformComponent.class);
 
+        comparator = new ZComparator();
+
         renderQueue = new Array<Entity>();
 
         this.batch = batch;

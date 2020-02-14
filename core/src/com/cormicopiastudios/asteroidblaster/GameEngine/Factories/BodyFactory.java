@@ -75,8 +75,29 @@ public class BodyFactory {
      *
      * Begin Circular Bodies
      * */
-    public Body makeCirclePolyBody(float posx, float posy, float radius, FIXTURE_TYPE mat,
+    public Body makeAsteroidBody(float posx, float posy, float radius, FIXTURE_TYPE mat,
                                    BodyDef.BodyType bodyType, boolean fixedRotation) {
+        BodyDef bdef = new BodyDef();
+        bdef.type = bodyType;
+        bdef.position.x = posx;
+        bdef.position.y = posy;
+        bdef.fixedRotation = fixedRotation;
+
+        // create body for the def yo
+        Body newBod = world.createBody(bdef);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(radius / 2);
+        newBod.createFixture(makeFixture(mat, shape));
+        shape.dispose();
+        return newBod;
+    }
+
+    /**
+     *
+     * Begin Circular Bodies
+     * */
+    public Body makeCirclePolyBody(float posx, float posy, float radius, FIXTURE_TYPE mat,
+                                 BodyDef.BodyType bodyType, boolean fixedRotation) {
         BodyDef bdef = new BodyDef();
         bdef.type = bodyType;
         bdef.position.x = posx;
