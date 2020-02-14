@@ -27,6 +27,7 @@ import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.ModelControl
 import com.cormicopiastudios.asteroidblaster.GameEngine.Factories.LevelFactory;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Factories.BodyFactory;
 import com.cormicopiastudios.asteroidblaster.GameEngine.GameMaster;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.AsteroidSystem;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.CollisionSystem;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.PhysicsDebugSystem;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.PhysicsSystem;
@@ -81,6 +82,8 @@ public class PlayScreen implements Screen {
         engine.addSystem(new CollisionSystem());
         engine.addSystem(new PlayerControlSystem(inputController));
         levelFactory = new LevelFactory(world, (PooledEngine)engine, this);
+        engine.addSystem(new AsteroidSystem(levelFactory));
+
     }
 
     public AssetController getAssetController() { return this.assetController; }

@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.AsteroidComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComponent;
@@ -60,9 +61,13 @@ public class PhysicsSystem extends IntervalIteratingSystem {
                 }
                 tfm.rotation = rot-90f;
                 bodyComp.body.setTransform(pos, MathUtils.degreesToRadians * tfm.rotation);
-            } else {
-                tfm.rotation = bodyComp.body.getAngle() * MathUtils.radiansToDegrees;
+            } else if (ent.getComponent(TypeComponent.class).type == TypeComponent.ENEMY) {
+                bodyComp.body.setLinearVelocity(ent.getComponent(AsteroidComponent.class).speed);
             }
+
+//            else {
+//                tfm.rotation = bodyComp.body.getAngle() * MathUtils.radiansToDegrees;
+//            }
             // **********************************************************
         }
         bodiesQueue.clear();

@@ -2,6 +2,8 @@ package com.cormicopiastudios.asteroidblaster.GameEngine.Factories;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.AsteroidComponent;
@@ -25,6 +27,7 @@ public class LevelFactory {
     private BodyFactory bodyFactory;
     private AssetController assetController;
     private PlayScreen parent;
+    private Entity player;
 
     public LevelFactory(World world, PooledEngine en, PlayScreen parent) {
         this.parent = parent;
@@ -47,7 +50,7 @@ public class LevelFactory {
         createAsteroid(25,20);
         createAsteroid(25f,0);
         createAsteroid(0,0);
-        createAsteroid(0,20);
+        createAsteroid(0,10);
     }
 
     /**
@@ -84,7 +87,9 @@ public class LevelFactory {
         texture.texture = assetController.manager.get(assetController.asteroid);
         type.type = TypeComponent.ENEMY;
         b2body.body.setUserData(entity);
-        asteroid.speed = 10.f;
+        asteroid.intialPos.x = posx;
+        asteroid.intialPos.y = posy;
+        asteroid.speed = getLaunchSpeed(posx, posy);
 
         entity.add(b2body);
         entity.add(position);
@@ -97,9 +102,13 @@ public class LevelFactory {
 
     }
 
+
     private void createPlayer() {
+
+        float posx = 15;
+        float posy = 10;
         // create the entity and all the components in it
-        Entity entity = engine.createEntity();
+        player = engine.createEntity();
         B2BodyComponent b2BodyComponent = engine.createComponent(B2BodyComponent.class);
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
@@ -109,27 +118,56 @@ public class LevelFactory {
         StateComponent stateComponent = engine.createComponent(StateComponent.class);
 
         // create the data for the components
-        b2BodyComponent.body = bodyFactory.makeBoxPolyBody(12.5f,10,1,2,BodyFactory.FIXTURE_TYPE.STEEL, BodyDef.BodyType.DynamicBody,true);
+        b2BodyComponent.body = bodyFactory.makeBoxPolyBody(posx,posy,1,2,BodyFactory.FIXTURE_TYPE.STEEL, BodyDef.BodyType.DynamicBody,true);
 
         // set object pos
-        transformComponent.position.set(5,5,0);
+        transformComponent.position.set(posx,posy,0);
         textureComponent.texture = assetController.manager.get(assetController.redShip);
         typeComponent.type = TypeComponent.PLAYER;
         stateComponent.set(StateComponent.STATE_NORMAL);
-        b2BodyComponent.body.setUserData(entity);
+        b2BodyComponent.body.setUserData(player);
         playerComponent.cam = parent.getGamecam();
 
         // add components to entity
-        entity.add(b2BodyComponent);
-        entity.add(transformComponent);
-        entity.add(textureComponent);
-        entity.add(playerComponent);
-        entity.add(collisionComponent);
-        entity.add(typeComponent);
-        entity.add(stateComponent);
+        player.add(b2BodyComponent);
+        player.add(transformComponent);
+        player.add(textureComponent);
+        player.add(playerComponent);
+        player.add(collisionComponent);
+        player.add(typeComponent);
+        player.add(stateComponent);
 
         // add to engine
-        engine.addEntity(entity);
+        engine.addEntity(player);
+    }
+
+    public Entity getPlayer() {
+        return player;
+    }
+
+    public Vector2 getLaunchSpeed(float posx, float posy) {
+        float speed = 1f;
+        float velX = player.getComponent(TransformComponent.class).position.x-posx;
+        float velY = player.getComponent(TransformComponent.class).position.y-posy;
+        Gdx.app.log("velx", ": " + velX);
+        Gdx.app.log("vely", ": " + velY);
+        Gdx.app.log("player pos", ": " + player.getComponent(TransformComponent.class).position);
+
+
+
+
+        float dist = (float)Math.sqrt(velX*velX+velY*velY);
+
+        if (dist != 0) {
+            velX = velX/dist;
+            velY = velY/dist;
+        }
+
+        Vector2 launchSpeed = new Vector2(speed*velX, speed*velY);
+
+        Gdx.app.log("Launch Speed", ": " + launchSpeed);
+
+        return launchSpeed;
     }
 
     // TODO updateLevel()
