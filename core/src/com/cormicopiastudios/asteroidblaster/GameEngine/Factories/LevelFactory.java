@@ -46,11 +46,11 @@ public class LevelFactory {
 
 
     public void initialAsteroids() {
-        createAsteroid(10,10);
-        createAsteroid(25,20);
-        createAsteroid(25f,0);
-        createAsteroid(0,0);
-        createAsteroid(0,10);
+//        createAsteroid(10,10);
+//        createAsteroid(25,20);
+//        createAsteroid(25f,0);
+//        createAsteroid(0,0);
+        createAsteroid(0,5);
     }
 
     /**
@@ -146,7 +146,7 @@ public class LevelFactory {
     }
 
     public Vector2 getLaunchSpeed(float posx, float posy) {
-        float speed = 1f;
+        float speed = 5f;
         float velX = player.getComponent(TransformComponent.class).position.x-posx;
         float velY = player.getComponent(TransformComponent.class).position.y-posy;
         Gdx.app.log("velx", ": " + velX);
