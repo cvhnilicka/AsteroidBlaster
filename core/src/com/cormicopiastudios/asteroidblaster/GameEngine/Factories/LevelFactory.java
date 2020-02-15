@@ -60,7 +60,7 @@ public class LevelFactory {
      * - Shooting Stars
      * */
     // TODO private void addAsteroid()
-    // TODO private void assShootingStar()
+    // TODO private void addShootingStar()
     // TODO private void addWalls()
 
 
@@ -80,7 +80,7 @@ public class LevelFactory {
         CollisionComponent collision = engine.createComponent(CollisionComponent.class);
 
         // set data
-        b2body.body = bodyFactory.makeAsteroidBody(posx,posy,3, BodyFactory.FIXTURE_TYPE.STONE,
+        b2body.body = bodyFactory.makeAsteroidBody(posx,posy,1, BodyFactory.FIXTURE_TYPE.STONE,
                 BodyDef.BodyType.DynamicBody, true);
 
         position.position.set(posx,posy,1);
