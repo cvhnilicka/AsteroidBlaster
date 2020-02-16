@@ -6,4 +6,5 @@ import com.badlogic.gdx.physics.box2d.Body;
 public class B2BodyComponent implements Component {
     // Stores box2d body information
     public Body body;
+    public boolean isDead = false;
 }

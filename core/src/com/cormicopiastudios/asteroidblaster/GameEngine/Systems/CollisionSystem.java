@@ -29,25 +29,62 @@ public class CollisionSystem extends IteratingSystem {
 
         // get player collision comp
         CollisionComponent cc = cm.get(entity);
-
+        // collided entity
         Entity collidedEntity = cc.collisionEntity;
-        if (collidedEntity != null) {
-            TypeComponent type = collidedEntity.getComponent(TypeComponent.class);
-            if (type != null) {
-                switch (type.type) {
-                    case TypeComponent.ENEMY:
-                        Gdx.app.log("Collision System", "Collided with enemy type");
-                        break;
-                    case TypeComponent.SCENERY:
-                        Gdx.app.log("Collision System", "Collided with scenery type");
-                        break;
-                    case TypeComponent.OTHER:
-                        Gdx.app.log("Collision System", "Collided with other type");
-                        break;
+
+        TypeComponent thisType = entity.getComponent(TypeComponent.class);
+        // do player collisions
+        if (thisType.type == TypeComponent.PLAYER) {
+            if (collidedEntity != null) {
+                TypeComponent type = collidedEntity.getComponent(TypeComponent.class);
+                if (type != null) {
+                    switch (type.type) {
+                        case TypeComponent.ENEMY:
+                            Gdx.app.log("Collision System", "Collided with enemy type");
+                            break;
+                        case TypeComponent.SCENERY:
+                            Gdx.app.log("Collision System", "Collided with scenery type");
+                            break;
+                        case TypeComponent.OTHER:
+                            Gdx.app.log("Collision System", "Collided with other type");
+                            break;
+                    }
+                    cc.collisionEntity = null; // reset
                 }
-                cc.collisionEntity = null; // reset
+            }
+        } else if (thisType.type == TypeComponent.ENEMY) {
+            if(collidedEntity != null){
+                TypeComponent type = collidedEntity.getComponent(TypeComponent.class);
+                if(type != null){
+                    switch(type.type){
+                        case TypeComponent.PLAYER:
+                            System.out.println("enemy hit player");
+                            break;
+                        case TypeComponent.ENEMY:
+                            System.out.println("enemy hit enemy");
+                            break;
+                        case TypeComponent.SCENERY:
+                            System.out.println("enemy hit scenery");
+                            break;
+                        case TypeComponent.OTHER:
+                            System.out.println("enemy hit other");
+                            break;
+//                        case TypeComponent.BULLET:
+//                            EnemyComponent enemy = Mapper.enemyCom.get(entity);
+//                            enemy.isDead = true;
+//                            System.out.println("enemy got shot");
+                        default:
+                            System.out.println("No matching type found");
+                    }
+                    cc.collisionEntity = null; // collision handled reset component
+                }else{
+                    System.out.println("type == null");
+                }
             }
         }
+
+
+
 
     }
 }
