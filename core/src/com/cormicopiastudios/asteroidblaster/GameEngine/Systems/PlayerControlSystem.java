@@ -94,6 +94,8 @@ public class PlayerControlSystem extends IteratingSystem {
                 lvlF.createBullet(sx, sy, vx * speed, vy * speed);
                 player.timeSinceLastShot = player.shootDelay;
 
+            } else {
+                player.timeSinceLastShot -= deltaTime;
             }
 
         }

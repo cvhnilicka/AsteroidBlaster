@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.AsteroidComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.BulletComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.CollisionComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
@@ -75,6 +76,7 @@ public class CollisionSystem extends IteratingSystem {
                         case TypeComponent.BULLET:
                             AsteroidComponent asteroid = ComponentMapper.getFor(AsteroidComponent.class).get(entity);
                             asteroid.isDead = true;
+                            collidedEntity.getComponent(BulletComponent.class).isDead = true;
                             System.out.println("enemy got shot");
                         default:
                             System.out.println("No matching type found");

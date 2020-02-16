@@ -7,5 +7,5 @@ public class PlayerComponent implements Component {
     // used to identify player
     public OrthographicCamera cam = null;
     public float timeSinceLastShot = 0.f;
-    public float shootDelay = 0.5f;
+    public float shootDelay = 0.3f;
 }
