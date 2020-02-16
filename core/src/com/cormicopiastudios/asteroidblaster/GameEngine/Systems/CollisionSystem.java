@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.AsteroidComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.CollisionComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
@@ -18,7 +19,7 @@ public class CollisionSystem extends IteratingSystem {
     @SuppressWarnings("unchecked")
     public CollisionSystem() {
         // only need to worry about play collision for now
-        super (Family.all(CollisionComponent.class, PlayerComponent.class).get());
+        super (Family.all(CollisionComponent.class).get());
 
         cm = ComponentMapper.getFor(CollisionComponent.class);
         pm = ComponentMapper.getFor(PlayerComponent.class);
@@ -33,6 +34,7 @@ public class CollisionSystem extends IteratingSystem {
         Entity collidedEntity = cc.collisionEntity;
 
         TypeComponent thisType = entity.getComponent(TypeComponent.class);
+//        Gdx.app.log("Collision System", " This type: " + thisType.type);
         // do player collisions
         if (thisType.type == TypeComponent.PLAYER) {
             if (collidedEntity != null) {
@@ -40,19 +42,20 @@ public class CollisionSystem extends IteratingSystem {
                 if (type != null) {
                     switch (type.type) {
                         case TypeComponent.ENEMY:
-                            Gdx.app.log("Collision System", "Collided with enemy type");
+//                            Gdx.app.log("Collision System", "Collided with enemy type");
                             break;
                         case TypeComponent.SCENERY:
-                            Gdx.app.log("Collision System", "Collided with scenery type");
+//                            Gdx.app.log("Collision System", "Collided with scenery type");
                             break;
                         case TypeComponent.OTHER:
-                            Gdx.app.log("Collision System", "Collided with other type");
+//                            Gdx.app.log("Collision System", "Collided with other type");
                             break;
                     }
                     cc.collisionEntity = null; // reset
                 }
             }
         } else if (thisType.type == TypeComponent.ENEMY) {
+//            Gdx.app.log("CollisionSystem", "ENEMYYYYY");
             if(collidedEntity != null){
                 TypeComponent type = collidedEntity.getComponent(TypeComponent.class);
                 if(type != null){
@@ -69,10 +72,10 @@ public class CollisionSystem extends IteratingSystem {
                         case TypeComponent.OTHER:
                             System.out.println("enemy hit other");
                             break;
-//                        case TypeComponent.BULLET:
-//                            EnemyComponent enemy = Mapper.enemyCom.get(entity);
-//                            enemy.isDead = true;
-//                            System.out.println("enemy got shot");
+                        case TypeComponent.BULLET:
+                            AsteroidComponent asteroid = ComponentMapper.getFor(AsteroidComponent.class).get(entity);
+                            asteroid.isDead = true;
+                            System.out.println("enemy got shot");
                         default:
                             System.out.println("No matching type found");
                     }

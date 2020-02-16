@@ -1,6 +1,7 @@
 package com.cormicopiastudios.asteroidblaster.GameEngine.Controllers;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -22,6 +23,7 @@ public class B2ContactListener implements ContactListener {
     public void beginContact(Contact contact) {
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
+        Gdx.app.log("Contact Listener", "CONTACT");
 
         if (fa.getBody().getUserData() instanceof Entity) {
             Entity ent = (Entity)fa.getBody().getUserData();
@@ -35,6 +37,7 @@ public class B2ContactListener implements ContactListener {
 
     private void entityCollision(Entity ent, Fixture fix) {
         if (fix.getBody().getUserData() instanceof Entity) {
+            Gdx.app.log("Contact Listener", "ENTITY COLLISION");
             Entity colEnt = (Entity) fix.getBody().getUserData();
 
             CollisionComponent col = ent.getComponent(CollisionComponent.class);

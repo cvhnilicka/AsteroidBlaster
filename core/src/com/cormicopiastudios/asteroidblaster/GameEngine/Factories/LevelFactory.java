@@ -79,7 +79,8 @@ public class LevelFactory {
         CollisionComponent colComp = engine.createComponent(CollisionComponent.class);
         BulletComponent bul = engine.createComponent(BulletComponent.class);
 
-        b2dbody.body = bodyFactory.makeCirclePolyBody(x, y, 0.5f, BodyFactory.FIXTURE_TYPE.STONE, BodyDef.BodyType.DynamicBody, true);
+        b2dbody.body = bodyFactory.makeCirclePolyBody(x, y, 0.5f,
+                BodyFactory.FIXTURE_TYPE.STONE, BodyDef.BodyType.DynamicBody, true);
         b2dbody.body.setBullet(true); // increase physics computation to limit body travelling through other objects
         bodyFactory.makeAllFixturesSensors(b2dbody.body); // make bullets sensors so they don't move player
         position.position.set(x, y, 0);
@@ -180,9 +181,9 @@ public class LevelFactory {
         float speed = 5f;
         float velX = player.getComponent(TransformComponent.class).position.x-posx;
         float velY = player.getComponent(TransformComponent.class).position.y-posy;
-        Gdx.app.log("velx", ": " + velX);
-        Gdx.app.log("vely", ": " + velY);
-        Gdx.app.log("player pos", ": " + player.getComponent(TransformComponent.class).position);
+//        Gdx.app.log("velx", ": " + velX);
+//        Gdx.app.log("vely", ": " + velY);
+//        Gdx.app.log("player pos", ": " + player.getComponent(TransformComponent.class).position);
 
 
 

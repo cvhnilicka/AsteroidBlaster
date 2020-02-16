@@ -72,28 +72,29 @@ public class PlayerControlSystem extends IteratingSystem {
         // Shooting Stuff
         if (controller.isMouse1Down) {
             // add a shoot delay later
+            if (player.timeSinceLastShot <= 0) {
 
-            Vector3 mPos = new Vector3(controller.mouseLocation.x, controller.mouseLocation.y, 0);
-            player.cam.unproject(mPos);
+                Vector3 mPos = new Vector3(controller.mouseLocation.x, controller.mouseLocation.y, 0);
+                player.cam.unproject(mPos);
 
-            float speed = 10.f;
-            float sx = b2body.body.getPosition().x;
-            float sy = b2body.body.getPosition().y;
-            float vx = mPos.x - sx;
-            float vy = mPos.y - sy;
+                float speed = 10.f;
+                float sx = b2body.body.getPosition().x;
+                float sy = b2body.body.getPosition().y;
+                float vx = mPos.x - sx;
+                float vy = mPos.y - sy;
 
-            float dist = (float)Math.sqrt(vx*vx+vy*vy);
+                float dist = (float) Math.sqrt(vx * vx + vy * vy);
 
-            if (dist != 0) {
-                vx = vx/dist;
-                vy = vy/dist;
+                if (dist != 0) {
+                    vx = vx / dist;
+                    vy = vy / dist;
+                }
+
+                // create bullet in the level factory here
+                lvlF.createBullet(sx, sy, vx * speed, vy * speed);
+                player.timeSinceLastShot = player.shootDelay;
+
             }
-
-            // create bullet in the level factory here
-            lvlF.createBullet(sx,sy,vx*speed,vy*speed);
-            player.timeSinceLastShot = player.shootDelay;
-
-
 
         }
     }
