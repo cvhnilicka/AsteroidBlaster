@@ -19,6 +19,7 @@ public class AssetController {
     public final String star_background = "star_background1.png";
     public final String plain_background = "background.png";
     public final String flameAsteroid = "flaming_asteroid.png";
+    public final String bullet = "bulletv1.png";
 
     // numbers
     public final String one = "Numbers/one_norm.png";
@@ -42,6 +43,7 @@ public class AssetController {
 
     public void queueAddImages() {
         manager.load(player, Texture.class);
+        manager.load(bullet, Texture.class);
         manager.load(asteroid, Texture.class);
         manager.load(leftWall, Texture.class);
         manager.load(rightWall, Texture.class);

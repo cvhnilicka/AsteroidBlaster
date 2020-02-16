@@ -43,6 +43,9 @@ public class AsteroidSystem extends IteratingSystem {
 //            position.position.x = asteroid.intialPos.x;
 //            position.position.y = asteroid.intialPos.y;
         }
+        if (asteroid.isDead) {
+            body.isDead = true;
+        }
 //        Gdx.app.log(("Asteroid System"), "Distance " + dist);
 
 

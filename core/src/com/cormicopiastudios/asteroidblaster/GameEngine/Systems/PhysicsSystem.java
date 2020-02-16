@@ -3,6 +3,7 @@ package com.cormicopiastudios.asteroidblaster.GameEngine.Systems;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IntervalIteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -26,14 +27,16 @@ public class PhysicsSystem extends IntervalIteratingSystem {
 
     private ComponentMapper<B2BodyComponent> bm = ComponentMapper.getFor(B2BodyComponent.class);
     private ComponentMapper<TransformComponent> tm = ComponentMapper.getFor(TransformComponent.class);
+    private PooledEngine engine;
 
 
     @SuppressWarnings("unchecked")
-    public PhysicsSystem(World world, InputController controller) {
+    public PhysicsSystem(World world, InputController controller, PooledEngine en) {
         super(Family.all().get(), MAX_STEP_TIME);
         this.world = world;
         this.controller = controller;
         this.bodiesQueue = new Array<Entity>();
+        this.engine = en;
     }
 
     @Override
@@ -63,6 +66,11 @@ public class PhysicsSystem extends IntervalIteratingSystem {
                 bodyComp.body.setTransform(pos, MathUtils.degreesToRadians * tfm.rotation);
             } else if (ent.getComponent(TypeComponent.class).type == TypeComponent.ENEMY) {
                 bodyComp.body.setLinearVelocity(ent.getComponent(AsteroidComponent.class).speed);
+            }
+            if(bodyComp.isDead){
+                System.out.println("Removing a body and entity");
+                world.destroyBody(bodyComp.body);
+                engine.removeEntity(ent);
             }
 
 //            else {

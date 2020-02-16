@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.AsteroidComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.BulletComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.CollisionComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StateComponent;
@@ -68,6 +69,37 @@ public class LevelFactory {
 //        int angleOffset = 360/getNumSections();
 //
 //    }
+
+    public Entity createBullet(float x, float y, float xVel, float yVel) {
+        Entity entity = engine.createEntity();
+        B2BodyComponent b2dbody = engine.createComponent(B2BodyComponent.class);
+        TransformComponent position = engine.createComponent(TransformComponent.class);
+        TextureComponent texture = engine.createComponent(TextureComponent.class);
+        TypeComponent type = engine.createComponent(TypeComponent.class);
+        CollisionComponent colComp = engine.createComponent(CollisionComponent.class);
+        BulletComponent bul = engine.createComponent(BulletComponent.class);
+
+        b2dbody.body = bodyFactory.makeCirclePolyBody(x, y, 0.5f,
+                BodyFactory.FIXTURE_TYPE.STONE, BodyDef.BodyType.DynamicBody, true);
+        b2dbody.body.setBullet(true); // increase physics computation to limit body travelling through other objects
+        bodyFactory.makeAllFixturesSensors(b2dbody.body); // make bullets sensors so they don't move player
+        position.position.set(x, y, 0);
+        texture.texture = assetController.manager.get(assetController.bullet);
+        type.type = TypeComponent.BULLET;
+        b2dbody.body.setUserData(entity);
+        bul.xVel = xVel;
+        bul.yVel = yVel;
+
+        entity.add(bul);
+        entity.add(colComp);
+        entity.add(b2dbody);
+        entity.add(position);
+        entity.add(texture);
+        entity.add(type);
+
+        engine.addEntity(entity);
+        return entity;
+    }
 
     public void createAsteroid(float posx, float posy) {
         // logic to add an asteroid
@@ -149,9 +181,9 @@ public class LevelFactory {
         float speed = 5f;
         float velX = player.getComponent(TransformComponent.class).position.x-posx;
         float velY = player.getComponent(TransformComponent.class).position.y-posy;
-        Gdx.app.log("velx", ": " + velX);
-        Gdx.app.log("vely", ": " + velY);
-        Gdx.app.log("player pos", ": " + player.getComponent(TransformComponent.class).position);
+//        Gdx.app.log("velx", ": " + velX);
+//        Gdx.app.log("vely", ": " + velY);
+//        Gdx.app.log("player pos", ": " + player.getComponent(TransformComponent.class).position);
 
 
 
