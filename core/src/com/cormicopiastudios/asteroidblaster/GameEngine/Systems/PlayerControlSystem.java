@@ -4,7 +4,9 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
@@ -49,23 +51,35 @@ public class PlayerControlSystem extends IteratingSystem {
                 state.set(StateComponent.STATE_MOVING);
             }
         }
-
-        if(controller.left){
-            b2body.body.setLinearVelocity(MathUtils.lerp(b2body.body.getLinearVelocity().x, -1f, 0.2f),b2body.body.getLinearVelocity().y);
+        int maxSpeed = 5;
+//        Gdx.app.log("Player Control", String.valueOf(b2body.body.getLinearVelocity()));
+        if(controller.left && b2body.body.getLinearVelocity().x > -maxSpeed){
+            Gdx.app.log("Player Control", "LEFT");
+            b2body.body.applyLinearImpulse(new Vector2(-.5f,0), b2body.body.getWorldCenter(), true);
+//            b2body.body.setLinearVelocity(MathUtils.lerp(b2body.body.getLinearVelocity().x, -1f, 1.f),b2body.body.getLinearVelocity().y);
         }
-        if(controller.right){
-            b2body.body.setLinearVelocity(MathUtils.lerp(b2body.body.getLinearVelocity().x, 1f, 0.2f),b2body.body.getLinearVelocity().y);
+        if(controller.right && b2body.body.getLinearVelocity().x < maxSpeed){
+//            Gdx.app.log("Player Control", "RIGHT");
+            b2body.body.applyLinearImpulse(new Vector2(.5f,0), b2body.body.getWorldCenter(), true);
+
+//            b2body.body.setLinearVelocity(MathUtils.lerp(b2body.body.getLinearVelocity().x, 1f, 1.0f),b2body.body.getLinearVelocity().y);
         }
 
-        if(!controller.left && ! controller.right){
-            b2body.body.setLinearVelocity(MathUtils.lerp(b2body.body.getLinearVelocity().x, 0, 0.1f),b2body.body.getLinearVelocity().y);
-        }
+        if(controller.up && b2body.body.getLinearVelocity().y < maxSpeed){
+            Gdx.app.log("Player Control", "UP");
+            b2body.body.applyLinearImpulse(new Vector2(0,.5f), b2body.body.getWorldCenter(), true);
 
-        if(controller.up &&
-                (state.get() == StateComponent.STATE_NORMAL || state.get() == StateComponent.STATE_MOVING)){
             //b2body.body.applyForceToCenter(0, 3000,true);
-            b2body.body.setLinearVelocity(b2body.body.getLinearVelocity().x,MathUtils.lerp(b2body.body.getLinearVelocity().y, 1, 0.1f));
-            state.set(StateComponent.STATE_JUMPING);
+//            b2body.body.setLinearVelocity(b2body.body.getLinearVelocity().x,MathUtils.lerp(b2body.body.getLinearVelocity().y, 1, 1f));
+        }
+        if(controller.down && b2body.body.getLinearVelocity().y > -maxSpeed){
+            Gdx.app.log("Player Control", "DOWN");
+
+            b2body.body.applyLinearImpulse(new Vector2(0,-.5f), b2body.body.getWorldCenter(), true);
+//            b2body.body.
+
+//            Gdx.app.log("Player Control", "DOWN");
+//            b2body.body.setLinearVelocity(b2body.body.getLinearVelocity().x,MathUtils.lerp(b2body.body.getLinearVelocity().y, -1, 1f));
         }
 
 
@@ -94,10 +108,9 @@ public class PlayerControlSystem extends IteratingSystem {
                 lvlF.createBullet(sx, sy, vx * speed, vy * speed);
                 player.timeSinceLastShot = player.shootDelay;
 
-            } else {
-                player.timeSinceLastShot -= deltaTime;
             }
 
         }
+        player.timeSinceLastShot -= deltaTime;
     }
 }

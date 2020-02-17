@@ -51,7 +51,7 @@ public class LevelFactory {
 //        createAsteroid(25,20);
 //        createAsteroid(25f,0);
 //        createAsteroid(0,0);
-        createAsteroid(0,5);
+//        createAsteroid(0,5);
     }
 
     /**
