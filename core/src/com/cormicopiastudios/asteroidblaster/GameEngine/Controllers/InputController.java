@@ -23,11 +23,21 @@ public class InputController implements InputProcessor {
             case Keys.LEFT:  	// if keycode is the same as Keys.LEFT a.k.a 21
                 left = true;	// do this
                 keyProcessed = true;// we have reacted to a keypress
+
+            case Keys.A:
+                left = true;	// do this
+                keyProcessed = true;// we have reacted to a keypress
                 break;
+            case Keys.D:
+                right = true;	// do this
+                keyProcessed = true;// we have reacted to a keypress
             case Keys.RIGHT: 	// if keycode is the same as Keys.LEFT a.k.a 22
                 right = true;	// do this
                 keyProcessed = true;// we have reacted to a keypress
                 break;
+            case Keys.W:
+                up = true;		// do this
+                keyProcessed = true;// we have reacted to a keypress
             case Keys.UP: 		// if keycode is the same as Keys.LEFT a.k.a 19
                 up = true;		// do this
                 keyProcessed = true;// we have reacted to a keypress
@@ -35,6 +45,9 @@ public class InputController implements InputProcessor {
             case Keys.DOWN: 	// if keycode is the same as Keys.LEFT a.k.a 20
                 down = true;	// do this
                 keyProcessed = true;// we have reacted to a keypress
+            case Keys.S:
+                down=true;
+                keyProcessed = true;
         }
         return keyProcessed;	//  return our peyProcessed flag
     }
@@ -44,14 +57,23 @@ public class InputController implements InputProcessor {
         boolean keyProcessed = false;
         switch (keycode) // switch code base on the variable keycode
         {
+            case Keys.A:
+                left = false;	// do this
+                keyProcessed = true;// we have reacted to a keypress
             case Keys.LEFT:  	// if keycode is the same as Keys.LEFT a.k.a 21
                 left = false;	// do this
                 keyProcessed = true;	// we have reacted to a keypress
                 break;
+            case Keys.D:
+                right = false;	// do this
+                keyProcessed = true;// we have reacted to a keypress
             case Keys.RIGHT: 	// if keycode is the same as Keys.LEFT a.k.a 22
                 right = false;	// do this
                 keyProcessed = true;	// we have reacted to a keypress
                 break;
+            case Keys.W:
+                up = false;		// do this
+                keyProcessed = true;// we have reacted to a keypress
             case Keys.UP: 		// if keycode is the same as Keys.LEFT a.k.a 19
                 up = false;		// do this
                 keyProcessed = true;	// we have reacted to a keypress
@@ -59,6 +81,9 @@ public class InputController implements InputProcessor {
             case Keys.DOWN: 	// if keycode is the same as Keys.LEFT a.k.a 20
                 down = false;	// do this
                 keyProcessed = true;	// we have reacted to a keypress
+            case Keys.S:
+                down=false;
+                keyProcessed = true;
         }
         return keyProcessed;	//  return our peyProcessed flag
     }
