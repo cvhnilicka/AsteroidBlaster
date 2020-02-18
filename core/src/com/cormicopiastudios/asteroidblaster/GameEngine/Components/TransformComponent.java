@@ -9,7 +9,7 @@ public class TransformComponent implements Component, Pool.Poolable {
     // Stores positional details
 
     public final Vector3 position = new Vector3();
-    public final Vector2 scale = new Vector2(1.0f, 1.0f);
+    public final Vector2 scale = new Vector2(2.0f, 2.0f);
     public float rotation = 0.0f;
     public boolean isHidden = false;
     @Override

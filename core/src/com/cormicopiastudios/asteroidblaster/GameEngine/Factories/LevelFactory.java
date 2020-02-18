@@ -3,11 +3,14 @@ package com.cormicopiastudios.asteroidblaster.GameEngine.Factories;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.AnimationComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.AsteroidComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.BulletComponent;
@@ -33,6 +36,7 @@ public class LevelFactory {
     private AssetController assetController;
     private PlayScreen parent;
     private Entity player;
+    private TextureAtlas atlas;
 
     private String[] bucketMappings;
 
@@ -43,6 +47,7 @@ public class LevelFactory {
         this.world = world;
         this.engine = en;
         this.assetController = parent.getAssetController();
+        this.atlas = assetController.manager.get(assetController.redShipPix, TextureAtlas.class);
         bodyFactory = BodyFactory.getInstance(world);
         asteroidBuckets = new ObjectMap<>();
         bucketMappings = new String[360];
@@ -58,9 +63,9 @@ public class LevelFactory {
 
     public void initialAsteroids() {
 //        createAsteroid(10,10);
-        createAsteroid(25,20);
+//        createAsteroid(25,20);
 //        createAsteroid(25f,0);
-        createAsteroid(0,0);
+//        createAsteroid(0,0);
 //        createAsteroid(0,5);
     }
 
@@ -167,6 +172,7 @@ public class LevelFactory {
         float posy = 10;
         // create the entity and all the components in it
         player = engine.createEntity();
+        AnimationComponent animComp = engine.createComponent(AnimationComponent.class);
         B2BodyComponent b2BodyComponent = engine.createComponent(B2BodyComponent.class);
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
@@ -181,12 +187,17 @@ public class LevelFactory {
         // set object pos
         transformComponent.position.set(posx,posy,0);
         textureComponent.texture = assetController.manager.get(assetController.redShip);
+        Animation anim = new Animation(0.1f, atlas.findRegions("redShip"));
+        anim.setPlayMode(Animation.PlayMode.LOOP);
+        animComp.animations.put(0,anim);
+        textureComponent.region = atlas.findRegion("redShip");
         typeComponent.type = TypeComponent.PLAYER;
         stateComponent.set(StateComponent.STATE_NORMAL);
         b2BodyComponent.body.setUserData(player);
         playerComponent.cam = parent.getGamecam();
 
         // add components to entity
+        player.add(animComp);
         player.add(b2BodyComponent);
         player.add(transformComponent);
         player.add(textureComponent);

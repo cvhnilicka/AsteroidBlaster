@@ -39,18 +39,18 @@ public class PlayerControlSystem extends IteratingSystem {
         StateComponent state = sm.get(entity);
         PlayerComponent player = pm.get(entity);
 
-        if(b2body.body.getLinearVelocity().y > 0){
-            state.set(StateComponent.STATE_FALLING);
-        }
-
-        if(b2body.body.getLinearVelocity().y == 0){
-            if(state.get() == StateComponent.STATE_FALLING){
-                state.set(StateComponent.STATE_NORMAL);
-            }
-            if(b2body.body.getLinearVelocity().x != 0){
-                state.set(StateComponent.STATE_MOVING);
-            }
-        }
+//        if(b2body.body.getLinearVelocity().y > 0){
+//            state.set(StateComponent.STATE_FALLING);
+//        }
+//
+//        if(b2body.body.getLinearVelocity().y == 0){
+//            if(state.get() == StateComponent.STATE_FALLING){
+//                state.set(StateComponent.STATE_NORMAL);
+//            }
+//            if(b2body.body.getLinearVelocity().x != 0){
+//                state.set(StateComponent.STATE_MOVING);
+//            }
+//        }dddd
         int maxSpeed = 5;
 //        Gdx.app.log("Player Control", String.valueOf(b2body.body.getLinearVelocity()));
         if(controller.left && b2body.body.getLinearVelocity().x > -maxSpeed){
