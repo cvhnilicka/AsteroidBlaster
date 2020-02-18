@@ -59,9 +59,9 @@ public class LevelFactory {
     public void initialAsteroids() {
 //        createAsteroid(10,10);
         createAsteroid(25,20);
-        createAsteroid(25f,0);
+//        createAsteroid(25f,0);
         createAsteroid(0,0);
-        createAsteroid(0,5);
+//        createAsteroid(0,5);
     }
 
     private void setBucketMappings() {
@@ -155,7 +155,10 @@ public class LevelFactory {
     }
 
     public void createAsteroid(Vector2 location) {
-        createAsteroid(location.x,location.y);
+        if (numAsteroids <= 20)
+            createAsteroid(location.x,location.y);
+        else
+            numAsteroids += 1;
     }
 
     private void createPlayer() {
@@ -220,7 +223,7 @@ public class LevelFactory {
 
         Vector2 launchSpeed = new Vector2(speed*velX, speed*velY);
 
-        Gdx.app.log("Launch Speed", ": " + launchSpeed);
+//        Gdx.app.log("Launch Speed", ": " + launchSpeed);
 
         return launchSpeed;
     }

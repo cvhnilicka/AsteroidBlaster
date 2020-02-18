@@ -91,7 +91,7 @@ public class PlayerControlSystem extends IteratingSystem {
                 Vector3 mPos = new Vector3(controller.mouseLocation.x, controller.mouseLocation.y, 0);
                 player.cam.unproject(mPos);
 
-                float speed = 10.f;
+                float speed = 25.f;
                 float sx = b2body.body.getPosition().x;
                 float sy = b2body.body.getPosition().y;
                 float vx = mPos.x - sx;

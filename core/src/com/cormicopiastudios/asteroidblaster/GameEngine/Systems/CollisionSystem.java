@@ -5,10 +5,13 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.AsteroidComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.BulletComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.CollisionComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
 
 public class CollisionSystem extends IteratingSystem {
@@ -58,6 +61,7 @@ public class CollisionSystem extends IteratingSystem {
         } else if (thisType.type == TypeComponent.ENEMY) {
 //            Gdx.app.log("CollisionSystem", "ENEMYYYYY");
             if(collidedEntity != null){
+                AsteroidComponent asteroid = ComponentMapper.getFor(AsteroidComponent.class).get(entity);
                 TypeComponent type = collidedEntity.getComponent(TypeComponent.class);
                 if(type != null){
                     switch(type.type){
@@ -66,6 +70,12 @@ public class CollisionSystem extends IteratingSystem {
                             break;
                         case TypeComponent.ENEMY:
                             System.out.println("enemy hit enemy");
+                            B2BodyComponent body = ComponentMapper.getFor(B2BodyComponent.class).get(entity);
+                            Vector2 vel = body.body.getLinearVelocity();
+//                            asteroid.speed = new Vector2(vel.x*-1, vel.y*-1);
+                            asteroid.speed = calculateReflection(collidedEntity,entity);
+                            collidedEntity.getComponent(AsteroidComponent.class).speed = calculateReflection(entity,collidedEntity);
+
                             break;
                         case TypeComponent.SCENERY:
                             System.out.println("enemy hit scenery");
@@ -74,7 +84,6 @@ public class CollisionSystem extends IteratingSystem {
                             System.out.println("enemy hit other");
                             break;
                         case TypeComponent.BULLET:
-                            AsteroidComponent asteroid = ComponentMapper.getFor(AsteroidComponent.class).get(entity);
                             asteroid.isDead = true;
                             collidedEntity.getComponent(BulletComponent.class).isDead = true;
                             System.out.println("enemy got shot");
@@ -87,9 +96,27 @@ public class CollisionSystem extends IteratingSystem {
                 }
             }
         }
+    }
 
+    private Vector2 calculateReflection(Entity collider, Entity collidedW) {
 
+        TransformComponent colliderTrans = ComponentMapper.getFor(TransformComponent.class).get(collider);
+        AsteroidComponent colliderAsteroid = ComponentMapper.getFor(AsteroidComponent.class).get(collider);
 
+        TransformComponent collidedWTrans = ComponentMapper.getFor(TransformComponent.class).get(collidedW);
+        AsteroidComponent collidedWAsteroid = ComponentMapper.getFor(AsteroidComponent.class).get(collidedW);
 
+        Vector2 normal = new Vector2(-(collidedWTrans.position.y - colliderTrans.position.y),
+                collidedWTrans.position.x - colliderTrans.position.x);
+
+        float d = (float)Math.sqrt(normal.x*normal.x+normal.y*normal.y);
+        normal = new Vector2(normal.x/d,normal.y/d);
+        double velDot = Vector2.dot(normal.x,normal.y,colliderAsteroid.speed.x,
+                colliderAsteroid.speed.y);
+
+        Vector2 reflectionVelocity = new Vector2(colliderAsteroid.speed.x-2*(float)velDot*normal.x,
+                colliderAsteroid.speed.y-2*(float)velDot*normal.y);
+
+        return reflectionVelocity;
     }
 }
