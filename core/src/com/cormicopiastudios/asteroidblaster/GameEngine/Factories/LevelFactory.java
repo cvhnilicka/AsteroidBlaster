@@ -6,6 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.AsteroidComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.BulletComponent;
@@ -17,6 +19,8 @@ import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComp
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.AssetController;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Views.PlayScreen;
+
+import java.util.Random;
 
 public class LevelFactory {
 
@@ -30,12 +34,18 @@ public class LevelFactory {
     private PlayScreen parent;
     private Entity player;
 
+    private String[] bucketMappings;
+
+    private ObjectMap<Integer, Array<Entity>> asteroidBuckets;
+
     public LevelFactory(World world, PooledEngine en, PlayScreen parent) {
         this.parent = parent;
         this.world = world;
         this.engine = en;
         this.assetController = parent.getAssetController();
         bodyFactory = BodyFactory.getInstance(world);
+        asteroidBuckets = new ObjectMap<>();
+        bucketMappings = new String[360];
         createPlayer();
         initialAsteroids();
 
@@ -48,10 +58,20 @@ public class LevelFactory {
 
     public void initialAsteroids() {
 //        createAsteroid(10,10);
-//        createAsteroid(25,20);
-//        createAsteroid(25f,0);
-//        createAsteroid(0,0);
-//        createAsteroid(0,5);
+        createAsteroid(25,20);
+        createAsteroid(25f,0);
+        createAsteroid(0,0);
+        createAsteroid(0,5);
+    }
+
+    private void setBucketMappings() {
+        int offset = (int)Math.floor(360/getNumSections());
+        int offsetCounter = 0;
+        for (int i = 0; i < 360;  i++) {
+            if (offsetCounter < offset) {
+//                this.bucketMappings[i] =
+            }
+        }
     }
 
     /**
@@ -134,6 +154,9 @@ public class LevelFactory {
 
     }
 
+    public void createAsteroid(Vector2 location) {
+        createAsteroid(location.x,location.y);
+    }
 
     private void createPlayer() {
 
@@ -200,6 +223,24 @@ public class LevelFactory {
         Gdx.app.log("Launch Speed", ": " + launchSpeed);
 
         return launchSpeed;
+    }
+
+    public Vector2 getAsteroidSpawn() {
+        Random ran = new Random();
+        float xmin = -5,
+                xmax = 30,
+                yTopFinal = 25,
+                yBotFinal = -5;
+        float xLoc = xmin + ran.nextFloat() * (xmax-xmin);
+        float yLoc;
+
+        if (xLoc > 0 && xLoc < 25) {
+            yLoc = (ran.nextFloat() > 0.5f) ? yTopFinal : yBotFinal;
+        } else {
+            yLoc = yBotFinal + ran.nextFloat() * (yTopFinal - yBotFinal);
+        }
+        return new Vector2(xLoc,yLoc);
+
     }
 
     // TODO updateLevel()

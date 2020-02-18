@@ -16,6 +16,7 @@ import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerCompone
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.InputController;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Factories.LevelFactory;
 
 public class PhysicsSystem extends IntervalIteratingSystem {
 
@@ -28,15 +29,17 @@ public class PhysicsSystem extends IntervalIteratingSystem {
     private ComponentMapper<B2BodyComponent> bm = ComponentMapper.getFor(B2BodyComponent.class);
     private ComponentMapper<TransformComponent> tm = ComponentMapper.getFor(TransformComponent.class);
     private PooledEngine engine;
+    private LevelFactory lvlf;
 
 
     @SuppressWarnings("unchecked")
-    public PhysicsSystem(World world, InputController controller, PooledEngine en) {
+    public PhysicsSystem(World world, InputController controller, PooledEngine en, LevelFactory lvlf) {
         super(Family.all().get(), MAX_STEP_TIME);
         this.world = world;
         this.controller = controller;
         this.bodiesQueue = new Array<Entity>();
         this.engine = en;
+        this.lvlf = lvlf;
     }
 
     @Override
@@ -71,6 +74,7 @@ public class PhysicsSystem extends IntervalIteratingSystem {
                 System.out.println("Removing a body and entity");
                 world.destroyBody(bodyComp.body);
                 engine.removeEntity(ent);
+                lvlf.createAsteroid(lvlf.getAsteroidSpawn());
             }
 
 //            else {
