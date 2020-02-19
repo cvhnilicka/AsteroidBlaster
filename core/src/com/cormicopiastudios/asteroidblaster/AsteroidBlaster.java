@@ -45,7 +45,7 @@ public class AsteroidBlaster extends Game {
 	
 	@Override
 	public void create () {
-		Gdx.graphics.setWindowedMode(792,634);
+		Gdx.graphics.setWindowedMode(960,800);
 		assetController = new AssetController();
 		// need to add asset manager/load assets
 		assetController.queueAddImages();
