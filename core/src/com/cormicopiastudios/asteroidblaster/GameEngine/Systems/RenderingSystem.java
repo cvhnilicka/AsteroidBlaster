@@ -113,9 +113,13 @@ public class RenderingSystem extends SortedIteratingSystem {
 
 //            Gdx.app.log("RenderSystem", "Texture " + tex.texture.toString());
 
-
-
-//            batch.draw(tex.texture,
+            batch.draw(tex.region,
+                    trans.position.x - originX, trans.position.y - originY,
+                    originX, originY,
+                    width, height,
+                    PixelsToMeters(trans.scale.x), PixelsToMeters(trans.scale.y),
+                    trans.rotation);
+//            batch.draw(tex.region,
 //                    trans.position.x - originX,
 //                    trans.position.y - originY,
 //                    (int)originX,
@@ -125,18 +129,18 @@ public class RenderingSystem extends SortedIteratingSystem {
 //            );
 
 
-            batch.draw(tex.texture,
-                    trans.position.x - originX,
-                    trans.position.y - originY,
-                    originX,
-                    originY,
-                    width,
-                    height,
-                    PixelsToMeters(trans.scale.x),
-                    PixelsToMeters(trans.scale.y),
-                    trans.rotation,
-                    0,0,tex.texture.getWidth(),tex.texture.getHeight(),false,false
-            );
+//            batch.draw(tex.texture,
+//                    trans.position.x - originX,
+//                    trans.position.y - originY,
+//                    originX,
+//                    originY,
+//                    width,
+//                    height,
+//                    PixelsToMeters(trans.scale.x),
+//                    PixelsToMeters(trans.scale.y),
+//                    trans.rotation,
+//                    0,0,tex.texture.getWidth(),tex.texture.getHeight(),false,false
+//            );
         }
 
         batch.end();

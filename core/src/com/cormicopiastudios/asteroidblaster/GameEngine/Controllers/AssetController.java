@@ -2,6 +2,7 @@ package com.cormicopiastudios.asteroidblaster.GameEngine.Controllers;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class AssetController {
@@ -20,6 +21,12 @@ public class AssetController {
     public final String plain_background = "background.png";
     public final String flameAsteroid = "flaming_asteroid.png";
     public final String bullet = "bulletv1.png";
+
+    // texturepacks
+    public final String redShipPix = "redship/redship.atlas";
+    public final String asteroidPix = "asteroids/asteroid.atlas";
+    public final String bulletPix  = "bullet/bullet.atlas";
+
 
     // numbers
     public final String one = "Numbers/one_norm.png";
@@ -76,6 +83,11 @@ public class AssetController {
 
         manager.load(whiteShip, Texture.class);
         manager.load(redShip, Texture.class);
+        manager.load(redShipPix, TextureAtlas.class);
+        manager.load(asteroidPix, TextureAtlas.class);
+        manager.load(bulletPix, TextureAtlas.class);
+
+
     }
 
 }

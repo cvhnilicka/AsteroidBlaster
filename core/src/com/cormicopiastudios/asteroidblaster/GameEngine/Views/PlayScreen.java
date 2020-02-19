@@ -27,6 +27,7 @@ import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.ModelControl
 import com.cormicopiastudios.asteroidblaster.GameEngine.Factories.LevelFactory;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Factories.BodyFactory;
 import com.cormicopiastudios.asteroidblaster.GameEngine.GameMaster;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.AnimationSystem;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.AsteroidSystem;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.BulletSystem;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.CollisionSystem;
@@ -75,13 +76,14 @@ public class PlayScreen implements Screen {
         // create pooled engine
         engine = new PooledEngine();
 
+        levelFactory = new LevelFactory(world, (PooledEngine)engine, this);
 
         // lets add the systems. they run in the order you add them
+        engine.addSystem(new AnimationSystem());
         engine.addSystem(renderingSystem);
-        engine.addSystem(new PhysicsSystem(world, inputController, (PooledEngine)engine));
+        engine.addSystem(new PhysicsSystem(world, inputController, (PooledEngine)engine, levelFactory));
         engine.addSystem(new PhysicsDebugSystem(world, renderingSystem.getCamera()));
         engine.addSystem(new CollisionSystem());
-        levelFactory = new LevelFactory(world, (PooledEngine)engine, this);
         engine.addSystem(new PlayerControlSystem(inputController, levelFactory));
         engine.addSystem(new BulletSystem(levelFactory.getPlayer()));
         engine.addSystem(new AsteroidSystem(levelFactory));
