@@ -69,6 +69,8 @@ public class PhysicsSystem extends IntervalIteratingSystem {
                 bodyComp.body.setTransform(pos, MathUtils.degreesToRadians * tfm.rotation);
             } else if (ent.getComponent(TypeComponent.class).type == TypeComponent.ENEMY) {
                 bodyComp.body.setLinearVelocity(ent.getComponent(AsteroidComponent.class).speed);
+            } else if (ent.getComponent(TypeComponent.class).type == TypeComponent.BULLET) {
+                bodyComp.body.setAngularVelocity(tfm.rotation);
             }
             if(bodyComp.isDead){
                 System.out.println("Removing a body and entity");
