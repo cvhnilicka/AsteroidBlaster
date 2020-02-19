@@ -11,6 +11,7 @@ import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyCompone
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.BulletComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.CollisionComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StateComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
 
@@ -84,7 +85,9 @@ public class CollisionSystem extends IteratingSystem {
                             System.out.println("enemy hit other");
                             break;
                         case TypeComponent.BULLET:
-                            asteroid.isDead = true;
+//                            asteroid.isDead = true;
+                            StateComponent asteroidState = ComponentMapper.getFor(StateComponent.class).get(entity);
+                            asteroidState.set(StateComponent.ASTEROID_DEAD);
                             collidedEntity.getComponent(BulletComponent.class).isDead = true;
                             System.out.println("enemy got shot");
                         default:

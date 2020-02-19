@@ -152,12 +152,16 @@ public class LevelFactory {
         AsteroidComponent asteroid = engine.createComponent(AsteroidComponent.class);
         TypeComponent type = engine.createComponent(TypeComponent.class);
         CollisionComponent collision = engine.createComponent(CollisionComponent.class);
-
+        AnimationComponent animCom = engine.createComponent(AnimationComponent.class);
+        StateComponent stateComponent = engine.createComponent(StateComponent.class);
         // set data
         b2body.body = bodyFactory.makeAsteroidBody(posx,posy,1, BodyFactory.FIXTURE_TYPE.STONE,
                 BodyDef.BodyType.DynamicBody, true);
 
         position.position.set(posx,posy,1);
+        Animation anim = new Animation(0.1f, asteroidAt.findRegions("asteroidblow"));
+        animCom.animations.put(0,anim);
+        stateComponent.set(StateComponent.ASTEROID_ALIVE);
         String region = (new Random().nextFloat() > 0.5) ? "asteroidOne" : "asteroidTwo";
         texture.region = asteroidAt.findRegion(region);
         texture.texture = assetController.manager.get(assetController.asteroid);
@@ -169,6 +173,8 @@ public class LevelFactory {
         position.scale.y = 1f;
         asteroid.speed = getLaunchSpeed(posx, posy);
 
+        entity.add(stateComponent);
+        entity.add(animCom);
         entity.add(b2body);
         entity.add(position);
         entity.add(texture);
