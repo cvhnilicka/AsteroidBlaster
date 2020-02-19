@@ -11,7 +11,9 @@ public class GameMaster {
     private AsteroidBlaster parent;
 
     public final static int V_WIDTH = 48;
-    public final static int V_HIEGHT = 40;
+    public final static int V_HIEGHT = 48;
+//    public final static int V_WIDTH = 128;
+//    public final static int V_HIEGHT = 128;
 
     private AssetController assetController;
 
