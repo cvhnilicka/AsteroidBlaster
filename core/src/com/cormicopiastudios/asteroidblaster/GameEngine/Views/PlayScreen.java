@@ -1,7 +1,6 @@
 package com.cormicopiastudios.asteroidblaster.GameEngine.Views;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -9,21 +8,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyComponent;
-import com.cormicopiastudios.asteroidblaster.GameEngine.Components.CollisionComponent;
-import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
-import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StateComponent;
-import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TextureComponent;
-import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComponent;
-import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.AssetController;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.B2ContactListener;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.InputController;
-import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.ModelController;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Factories.LevelFactory;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Factories.BodyFactory;
 import com.cormicopiastudios.asteroidblaster.GameEngine.GameMaster;
@@ -45,11 +33,8 @@ public class PlayScreen implements Screen {
 
     // camera
     private OrthographicCamera gamecam;
-    private Viewport viewport;
-    private Box2DDebugRenderer debugRenderer;
 
     private InputController inputController;
-    private ModelController modelController;
     private AssetController assetController;
     private LevelFactory levelFactory;
 
@@ -58,12 +43,12 @@ public class PlayScreen implements Screen {
 
 
     public PlayScreen(GameMaster gameMaster) {
+        Gdx.app.log("PLAYSCREEN CONSTRUCTOR", "BEGIN");
         this.gameMaster = gameMaster;
         // need to add/setup Keyboard Controller
         inputController = new InputController();
         world = new World(new Vector2(0,-0.f),true);
         world.setContactListener(new B2ContactListener(this));
-
         bodyFactory = BodyFactory.getInstance(world);
         // need to get assetmanager from asteroid blaster
         assetController = gameMaster.getAssetController();
@@ -87,6 +72,8 @@ public class PlayScreen implements Screen {
         engine.addSystem(new PlayerControlSystem(inputController, levelFactory));
         engine.addSystem(new BulletSystem(levelFactory.getPlayer()));
         engine.addSystem(new AsteroidSystem(levelFactory));
+        Gdx.app.log("PLAYSCREEN CONSTRUCTOR", "END");
+
 
     }
 

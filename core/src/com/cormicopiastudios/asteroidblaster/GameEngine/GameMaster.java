@@ -6,7 +6,7 @@ import com.cormicopiastudios.asteroidblaster.AsteroidBlaster;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.AssetController;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Views.PlayScreen;
 
-public class GameMaster {
+public class GameMaster extends Game {
 
     private AsteroidBlaster parent;
 
@@ -31,5 +31,10 @@ public class GameMaster {
 
     public AssetController getAssetController() {
         return assetController;
+    }
+
+    @Override
+    public void create() {
+
     }
 }
