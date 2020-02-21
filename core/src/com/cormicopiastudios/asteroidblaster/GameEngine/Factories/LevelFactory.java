@@ -67,11 +67,11 @@ public class LevelFactory {
 
 
     public void initialAsteroids() {
-        createAsteroid(10,10);
-        createAsteroid(25,20);
+        createAsteroid(2,27);
+        createAsteroid(25,30);
         createAsteroid(25f,0);
         createAsteroid(0,0);
-        createAsteroid(0,5);
+        createAsteroid(0,35);
     }
 
     private void setBucketMappings() {
@@ -207,7 +207,7 @@ public class LevelFactory {
         CollisionComponent collisionComponent = engine.createComponent(CollisionComponent.class);
         TypeComponent typeComponent = engine.createComponent(TypeComponent.class);
         StateComponent stateComponent = engine.createComponent(StateComponent.class);
-
+//
         // create the data for the components
         b2BodyComponent.body = bodyFactory.makeBoxPolyBody(posx,posy,1,2,BodyFactory.FIXTURE_TYPE.STEEL, BodyDef.BodyType.DynamicBody,true);
 
@@ -244,7 +244,7 @@ public class LevelFactory {
     }
 
     public Vector2 getLaunchSpeed(float posx, float posy) {
-        float speed = 3f;
+        float speed = 5f;
         float velX = player.getComponent(TransformComponent.class).position.x-posx;
         float velY = player.getComponent(TransformComponent.class).position.y-posy;
 //        Gdx.app.log("velx", ": " + velX);

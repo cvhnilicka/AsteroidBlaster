@@ -29,7 +29,7 @@ public class PlayScreen implements Screen {
     private GameMaster gameMaster;
     private World world;
     private BodyFactory bodyFactory;
-    private Engine engine;
+    private PooledEngine engine;
 
     // camera
     private OrthographicCamera gamecam;
