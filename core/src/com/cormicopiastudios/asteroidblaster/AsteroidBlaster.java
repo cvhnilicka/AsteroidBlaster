@@ -37,7 +37,7 @@ public class AsteroidBlaster extends Game {
 			case MAINMENU: if (mainMenu == null) mainMenu = new MainMenu(this);
 			this.setScreen(mainMenu);
 			break;
-			case GAME: gameMaster = new GameMaster(this);
+			case GAME: if (gameMaster == null) gameMaster = new GameMaster(this);
 		}
 	}
 
