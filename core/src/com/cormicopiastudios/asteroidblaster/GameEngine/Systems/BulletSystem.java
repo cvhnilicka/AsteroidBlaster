@@ -12,9 +12,9 @@ public class BulletSystem extends IteratingSystem {
     private Entity player;
 
     @SuppressWarnings("unchecked")
-    public BulletSystem(Entity plater) {
+    public BulletSystem(Entity player) {
         super(Family.all(BulletComponent.class).get());
-        this.player = plater;
+        this.player = player;
     }
 
     @Override

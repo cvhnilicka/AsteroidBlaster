@@ -17,6 +17,7 @@ import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyCompone
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.BulletComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.CollisionComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StarComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StateComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TextureComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComponent;
@@ -40,6 +41,7 @@ public class LevelFactory {
     private TextureAtlas shipAt;
     private TextureAtlas asteroidAt;
     private TextureAtlas bulletAt;
+    private TextureAtlas starAt;
 
     private String[] bucketMappings;
 
@@ -53,11 +55,13 @@ public class LevelFactory {
         this.shipAt = assetController.manager.get(assetController.redShipPix, TextureAtlas.class);
         this.asteroidAt = assetController.manager.get(assetController.asteroidPix, TextureAtlas.class);
         this.bulletAt = assetController.manager.get(assetController.bulletPix, TextureAtlas.class);
+        this.starAt = assetController.manager.get(assetController.starPix, TextureAtlas.class);
         bodyFactory = BodyFactory.getInstance(world);
         asteroidBuckets = new ObjectMap<>();
         bucketMappings = new String[360];
         createPlayer();
         initialAsteroids();
+        createStar();
 
     }
 
@@ -125,8 +129,8 @@ public class LevelFactory {
         b2dbody.body.setUserData(entity);
         bul.xVel = xVel;
         bul.yVel = yVel;
-        position.scale.x = 10f;
-        position.scale.y = 10f;
+        position.scale.x = 1f;
+        position.scale.y = 1f;
         position.rotation = (float) Math.atan2((double) mPos.y - y, (double) mPos.x-x )*180f/(float)Math.PI;
         position.rotation -= 90f;
 
@@ -141,6 +145,50 @@ public class LevelFactory {
 
         engine.addEntity(entity);
         return entity;
+    }
+
+    public void createStar() {
+        float sX, sY;
+        sX = 15;
+        sY = 15;
+        Entity entity = engine.createEntity();
+
+        B2BodyComponent body = engine.createComponent(B2BodyComponent.class);
+        TransformComponent position = engine.createComponent(TransformComponent.class);
+        TextureComponent texture = engine.createComponent(TextureComponent.class);
+        StarComponent starComp = engine.createComponent(StarComponent.class);
+        CollisionComponent collisionCom = engine.createComponent(CollisionComponent.class);
+        TypeComponent type = engine.createComponent(TypeComponent.class);
+        AnimationComponent animComp = engine.createComponent(AnimationComponent.class);
+        StateComponent state = engine.createComponent(StateComponent.class);
+
+        body.body = bodyFactory.makeCirclePolyBody(sX,sY,1, BodyFactory.FIXTURE_TYPE.RUBBER,
+                BodyDef.BodyType.DynamicBody, true);
+
+        position.position.set(sX,sY,1);
+        Animation anim = new Animation(0.1f, this.starAt.findRegions("Star"));
+        anim.setPlayMode(Animation.PlayMode.LOOP);
+        animComp.animations.put(0,anim);
+        state.set(StateComponent.STAR_SHOOTING);
+        texture.region = starAt.findRegion("Star");
+        type.type = TypeComponent.SHOOTINGSTAR;
+        body.body.setUserData(entity);
+        starComp.startingPosition.x = sX;
+        starComp.startingPosition.y = sY;
+        position.scale.x = 2f;
+        position.scale.y = 2f;
+
+        entity.add(body);
+        entity.add(position);
+        entity.add(texture);
+        entity.add(starComp);
+        entity.add(collisionCom);
+        entity.add(type);
+        entity.add(animComp);
+        entity.add(state);
+
+        engine.addEntity(entity);
+
     }
 
     public void createAsteroid(float posx, float posy) {

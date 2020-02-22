@@ -11,6 +11,8 @@ public class StateComponent implements Component {
     public static final int STATE_HIT = 4;
     public static final int ASTEROID_DEAD = 5;
     public static final int ASTEROID_ALIVE = 6;
+    public static final int STAR_SHOOTING = 7;
+    public static final int STAR_ABSORBED = 8;
 
     private int state = 0;
     public float time = 0.0f;
