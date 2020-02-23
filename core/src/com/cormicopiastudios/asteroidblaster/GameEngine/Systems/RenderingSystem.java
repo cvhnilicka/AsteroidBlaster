@@ -102,11 +102,11 @@ public class RenderingSystem extends SortedIteratingSystem {
                 continue;
             }
 
-            float width = tex.texture.getWidth()/10;
-            float height = tex.texture.getHeight()/10;
+//            float width = tex.texture.getWidth()/10;
+//            float height = tex.texture.getHeight()/10;
 
-//            float width = tex.region.getRegionWidth();
-//            float height = tex.region.getRegionHeight();
+            float width = tex.region.getRegionWidth();
+            float height = tex.region.getRegionHeight();
 
             float originX = width/2.f;
             float originY = height/2.f;

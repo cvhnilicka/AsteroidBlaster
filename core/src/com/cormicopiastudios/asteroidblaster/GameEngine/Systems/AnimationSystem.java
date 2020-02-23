@@ -44,6 +44,8 @@ public class AnimationSystem extends IteratingSystem {
             if (ani.animations.get(0).isAnimationFinished(state.time) && state.get() == StateComponent.ASTEROID_DEAD) {
                 ComponentMapper.getFor(AsteroidComponent.class).get(entity).isDead = true;
             }
+        } else {
+            tex.region = (TextureRegion) ani.animations.get(0).getKeyFrame(state.time, state.isLooping);
         }
         state.time += deltaTime;
 

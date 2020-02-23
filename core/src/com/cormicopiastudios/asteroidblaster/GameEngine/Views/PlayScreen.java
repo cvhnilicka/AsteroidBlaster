@@ -23,6 +23,7 @@ import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.PhysicsDebugSyst
 import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.PhysicsSystem;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.PlayerControlSystem;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.RenderingSystem;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Systems.StarSystem;
 
 public class PlayScreen implements Screen {
 
@@ -43,7 +44,6 @@ public class PlayScreen implements Screen {
 
 
     public PlayScreen(GameMaster gameMaster) {
-        Gdx.app.log("PLAYSCREEN CONSTRUCTOR", "BEGIN");
         this.gameMaster = gameMaster;
         // need to add/setup Keyboard Controller
         inputController = new InputController();
@@ -72,7 +72,7 @@ public class PlayScreen implements Screen {
         engine.addSystem(new PlayerControlSystem(inputController, levelFactory));
         engine.addSystem(new BulletSystem(levelFactory.getPlayer()));
         engine.addSystem(new AsteroidSystem(levelFactory));
-        Gdx.app.log("PLAYSCREEN CONSTRUCTOR", "END");
+        engine.addSystem(new StarSystem(levelFactory));
 
 
     }

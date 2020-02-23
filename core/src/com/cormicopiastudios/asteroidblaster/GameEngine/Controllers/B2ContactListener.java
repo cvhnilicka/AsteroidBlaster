@@ -23,7 +23,7 @@ public class B2ContactListener implements ContactListener {
     public void beginContact(Contact contact) {
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
-        Gdx.app.log("Contact Listener", "CONTACT");
+//        Gdx.app.log("Contact Listener", "CONTACT");
 
         if (fa.getBody().getUserData() instanceof Entity) {
             Entity ent = (Entity)fa.getBody().getUserData();
@@ -37,7 +37,7 @@ public class B2ContactListener implements ContactListener {
 
     private void entityCollision(Entity ent, Fixture fix) {
         if (fix.getBody().getUserData() instanceof Entity) {
-            Gdx.app.log("Contact Listener", "ENTITY COLLISION");
+//            Gdx.app.log("Contact Listener", "ENTITY COLLISION");
             Entity colEnt = (Entity) fix.getBody().getUserData();
 
             CollisionComponent col = ent.getComponent(CollisionComponent.class);

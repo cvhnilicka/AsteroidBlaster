@@ -11,6 +11,7 @@ import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyCompone
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.BulletComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.CollisionComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StarComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StateComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
@@ -55,6 +56,11 @@ public class CollisionSystem extends IteratingSystem {
                         case TypeComponent.OTHER:
 //                            Gdx.app.log("Collision System", "Collided with other type");
                             break;
+                            case TypeComponent.SHOOTINGSTAR:
+                                Gdx.app.log("Collision System", "Player Hit star");
+                                if (entity.getComponent(PlayerComponent.class).numStars < 3)
+                                    entity.getComponent(PlayerComponent.class).numStars += 1;
+                                collidedEntity.getComponent(StarComponent.class).isDead = true;
                     }
                     cc.collisionEntity = null; // reset
                 }

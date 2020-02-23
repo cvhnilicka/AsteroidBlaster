@@ -30,7 +30,6 @@ public class PlayerControlSystem extends IteratingSystem {
         pm = ComponentMapper.getFor(PlayerComponent.class);
         b2m = ComponentMapper.getFor(B2BodyComponent.class);
         sm = ComponentMapper.getFor(StateComponent.class);
-
         this.lvlF = lvlF;
     }
     @Override
@@ -39,47 +38,22 @@ public class PlayerControlSystem extends IteratingSystem {
         StateComponent state = sm.get(entity);
         PlayerComponent player = pm.get(entity);
 
-//        if(b2body.body.getLinearVelocity().y > 0){
-//            state.set(StateComponent.STATE_FALLING);
-//        }
-//
-//        if(b2body.body.getLinearVelocity().y == 0){
-//            if(state.get() == StateComponent.STATE_FALLING){
-//                state.set(StateComponent.STATE_NORMAL);
-//            }
-//            if(b2body.body.getLinearVelocity().x != 0){
-//                state.set(StateComponent.STATE_MOVING);
-//            }
-//        }dddd
         int maxSpeed = 5;
-//        Gdx.app.log("Player Control", String.valueOf(b2body.body.getLinearVelocity()));
         if(controller.left && b2body.body.getLinearVelocity().x > -maxSpeed){
-            Gdx.app.log("Player Control", "LEFT");
             b2body.body.applyLinearImpulse(new Vector2(-.5f,0), b2body.body.getWorldCenter(), true);
-//            b2body.body.setLinearVelocity(MathUtils.lerp(b2body.body.getLinearVelocity().x, -1f, 1.f),b2body.body.getLinearVelocity().y);
         }
         if(controller.right && b2body.body.getLinearVelocity().x < maxSpeed){
-//            Gdx.app.log("Player Control", "RIGHT");
             b2body.body.applyLinearImpulse(new Vector2(.5f,0), b2body.body.getWorldCenter(), true);
 
-//            b2body.body.setLinearVelocity(MathUtils.lerp(b2body.body.getLinearVelocity().x, 1f, 1.0f),b2body.body.getLinearVelocity().y);
         }
 
         if(controller.up && b2body.body.getLinearVelocity().y < maxSpeed){
-            Gdx.app.log("Player Control", "UP");
             b2body.body.applyLinearImpulse(new Vector2(0,.5f), b2body.body.getWorldCenter(), true);
-
-            //b2body.body.applyForceToCenter(0, 3000,true);
-//            b2body.body.setLinearVelocity(b2body.body.getLinearVelocity().x,MathUtils.lerp(b2body.body.getLinearVelocity().y, 1, 1f));
         }
         if(controller.down && b2body.body.getLinearVelocity().y > -maxSpeed){
-            Gdx.app.log("Player Control", "DOWN");
 
             b2body.body.applyLinearImpulse(new Vector2(0,-.5f), b2body.body.getWorldCenter(), true);
-//            b2body.body.
 
-//            Gdx.app.log("Player Control", "DOWN");
-//            b2body.body.setLinearVelocity(b2body.body.getLinearVelocity().x,MathUtils.lerp(b2body.body.getLinearVelocity().y, -1, 1f));
         }
 
 

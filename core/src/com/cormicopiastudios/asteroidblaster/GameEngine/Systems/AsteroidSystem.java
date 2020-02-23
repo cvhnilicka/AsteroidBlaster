@@ -37,16 +37,14 @@ public class AsteroidSystem extends IteratingSystem {
 
         float dist = asteroid.intialPos.dst(new Vector2(position.position.x, position.position.y));
         if (dist > 28) {
-            Gdx.app.log("Asteroid System", String.valueOf(new Vector2(asteroid.intialPos.x,asteroid.intialPos.y)));
+//            Gdx.app.log("Asteroid System", String.valueOf(new Vector2(asteroid.intialPos.x,asteroid.intialPos.y)));
             position.position.set(asteroid.intialPos.x,asteroid.intialPos.y, 0);
             body.body.setTransform(new Vector2(asteroid.intialPos.x,asteroid.intialPos.y), body.body.getAngle());
-//            position.position.x = asteroid.intialPos.x;
-//            position.position.y = asteroid.intialPos.y;
+
         }
         if (asteroid.isDead) {
             body.isDead = true;
         }
-//        Gdx.app.log(("Asteroid System"), "Distance " + dist);
 
 
     }

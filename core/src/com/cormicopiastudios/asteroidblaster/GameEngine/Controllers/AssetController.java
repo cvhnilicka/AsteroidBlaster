@@ -26,6 +26,7 @@ public class AssetController {
     public final String redShipPix = "redship/redship.atlas";
     public final String asteroidPix = "asteroids/asteroid.atlas";
     public final String bulletPix  = "bullet/bullet.atlas";
+    public final String starPix = "star/star.atlas";
 
 
     // numbers
@@ -86,6 +87,8 @@ public class AssetController {
         manager.load(redShipPix, TextureAtlas.class);
         manager.load(asteroidPix, TextureAtlas.class);
         manager.load(bulletPix, TextureAtlas.class);
+        manager.load(starPix, TextureAtlas.class);
+
 
 
     }
