@@ -8,6 +8,7 @@ public class StarComponent implements Component, Pool.Poolable {
     public boolean isDead = false;
     public float xVel = 0;
     public  float yVel = 0;
+    public Vector2 velocity = new Vector2();
     public Vector2 startingPosition = new Vector2();
     @Override
     public void reset() {

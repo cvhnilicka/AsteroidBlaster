@@ -43,6 +43,9 @@ public class LevelFactory {
     private TextureAtlas bulletAt;
     private TextureAtlas starAt;
 
+    private float screenYMax;
+    private float screenXMax;
+
     private String[] bucketMappings;
 
     private ObjectMap<Integer, Array<Entity>> asteroidBuckets;
@@ -59,6 +62,8 @@ public class LevelFactory {
         bodyFactory = BodyFactory.getInstance(world);
         asteroidBuckets = new ObjectMap<>();
         bucketMappings = new String[360];
+        this.screenXMax = this.parent.getGamecam().viewportWidth;
+        this.screenYMax = this.parent.getGamecam().viewportHeight;
         createPlayer();
         initialAsteroids();
         createStar();
@@ -71,11 +76,11 @@ public class LevelFactory {
 
 
     public void initialAsteroids() {
-        createAsteroid(2,27);
-        createAsteroid(25,30);
-        createAsteroid(25f,0);
         createAsteroid(0,0);
-        createAsteroid(0,35);
+        createAsteroid(0,25);
+        createAsteroid(30,0);
+        createAsteroid(30,25);
+//        createAsteroid(0,35);
     }
 
     private void setBucketMappings() {
@@ -148,9 +153,14 @@ public class LevelFactory {
     }
 
     public void createStar() {
+
+        Vector2 spawnloc = getStarSpawn();
+
         float sX, sY;
-        sX = 15;
-        sY = 15;
+//        sX = spawnloc.x;
+//        sY = spawnloc.y;
+        sX = 0;
+        sY = 20;
         Entity entity = engine.createEntity();
 
         B2BodyComponent body = engine.createComponent(B2BodyComponent.class);
@@ -177,6 +187,11 @@ public class LevelFactory {
         starComp.startingPosition.y = sY;
         position.scale.x = 2f;
         position.scale.y = 2f;
+        starComp.velocity = getLaunchSpeed(sX,sY);
+        position.rotation = (float) Math.atan2((double)starComp.velocity.y - sY,
+                (double)starComp.velocity.x - sX)*180f/(float)Math.PI;
+         position.rotation -= 90f;
+
 
         entity.add(body);
         entity.add(position);
@@ -295,11 +310,6 @@ public class LevelFactory {
         float speed = 5f;
         float velX = player.getComponent(TransformComponent.class).position.x-posx;
         float velY = player.getComponent(TransformComponent.class).position.y-posy;
-//        Gdx.app.log("velx", ": " + velX);
-//        Gdx.app.log("vely", ": " + velY);
-//        Gdx.app.log("player pos", ": " + player.getComponent(TransformComponent.class).position);
-
-
 
 
         float dist = (float)Math.sqrt(velX*velX+velY*velY);
@@ -311,27 +321,36 @@ public class LevelFactory {
 
         Vector2 launchSpeed = new Vector2(speed*velX, speed*velY);
 
-//        Gdx.app.log("Launch Speed", ": " + launchSpeed);
-
         return launchSpeed;
     }
 
     public Vector2 getAsteroidSpawn() {
+        return getObjectSpawn();
+
+    }
+
+    public Vector2 getObjectSpawn(){
         Random ran = new Random();
+//        Gdx.app.log("Screen Width: ", String.valueOf(this.parent.getGamecam().viewportWidth));
+//        Gdx.app.log("Screen Height: ", String.valueOf(this.parent.getGamecam().viewportHeight));
+
         float xmin = -5,
-                xmax = 30,
-                yTopFinal = 25,
+                xmax = this.screenXMax+5,
+                yTopFinal = this.screenYMax+5,
                 yBotFinal = -5;
         float xLoc = xmin + ran.nextFloat() * (xmax-xmin);
         float yLoc;
 
-        if (xLoc > 0 && xLoc < 25) {
+        if (xLoc > 0 && xLoc < screenXMax) {
             yLoc = (ran.nextFloat() > 0.5f) ? yTopFinal : yBotFinal;
         } else {
             yLoc = yBotFinal + ran.nextFloat() * (yTopFinal - yBotFinal);
         }
         return new Vector2(xLoc,yLoc);
+    }
 
+    public Vector2 getStarSpawn() {
+        return getObjectSpawn();
     }
 
     // TODO updateLevel()

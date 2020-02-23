@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.Array;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.AsteroidComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StarComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StateComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.InputController;
@@ -70,6 +72,9 @@ public class PhysicsSystem extends IntervalIteratingSystem {
             } else if (ent.getComponent(TypeComponent.class).type == TypeComponent.ENEMY) {
                 bodyComp.body.setLinearVelocity(ent.getComponent(AsteroidComponent.class).speed);
             } else if (ent.getComponent(TypeComponent.class).type == TypeComponent.BULLET) {
+                bodyComp.body.setAngularVelocity(tfm.rotation);
+            } else if (ent.getComponent(TypeComponent.class).type == TypeComponent.SHOOTINGSTAR) {
+                bodyComp.body.setLinearVelocity(ent.getComponent(StarComponent.class).velocity);
                 bodyComp.body.setAngularVelocity(tfm.rotation);
             }
             if(bodyComp.isDead){

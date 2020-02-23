@@ -8,4 +8,5 @@ public class PlayerComponent implements Component {
     public OrthographicCamera cam = null;
     public float timeSinceLastShot = 0.f;
     public float shootDelay = 0.3f;
+    public float numStars = 0f;
 }
