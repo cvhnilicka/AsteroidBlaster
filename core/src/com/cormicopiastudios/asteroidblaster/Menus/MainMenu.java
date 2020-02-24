@@ -56,8 +56,7 @@ public class MainMenu implements Screen {
         spriteBatch = new SpriteBatch();
         stateTime = 0.f;
         Gdx.input.setInputProcessor(stage);
-//        background = new TextureRegion(this.backgroundAtlas.findRegion("Background"));
-//        drawBackground = new Sprite(background);
+
 
         // Set the stage up
 

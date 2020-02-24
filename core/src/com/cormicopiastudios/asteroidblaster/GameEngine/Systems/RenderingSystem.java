@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -23,6 +24,12 @@ import com.cormicopiastudios.asteroidblaster.GameEngine.Views.PlayScreen;
 import java.util.Comparator;
 
 public class RenderingSystem extends SortedIteratingSystem {
+
+    SpriteBatch spriteBatch;
+    float stateTime;
+
+    private TextureAtlas backgroundAtlas;
+    private Animation backgroundAnim;
 
 
     static final float PPM = 32.f; // Sets the amount of pixels each meter of box2d object contain (will probably need to readjust this after the fact)
@@ -83,6 +90,12 @@ public class RenderingSystem extends SortedIteratingSystem {
         this.batch = batch;
         cam = new OrthographicCamera(FRUTSUM_W, FRUTSUM_H);
         cam.position.set(FRUTSUM_W/2.f, FRUTSUM_H/2.f,0);
+
+        this.backgroundAtlas = parent.getAssetController().manager.get(
+                parent.getAssetController().backgroundPix, TextureAtlas.class);
+        this.backgroundAnim = new Animation(0.1f, backgroundAtlas.findRegions("Background"));
+        backgroundAnim.setPlayMode(Animation.PlayMode.LOOP);
+        stateTime = 0.f;
 //        hud = new Hud(this, batch);
 
     }
@@ -99,11 +112,16 @@ public class RenderingSystem extends SortedIteratingSystem {
         // sort on z index
         renderQueue.sort(comparator);
 
+        stateTime += deltaTime;
+
+        TextureRegion toDraw = (TextureRegion)backgroundAnim.getKeyFrame(stateTime, true);
+
         // update cam and batch
         cam.update();
         batch.setProjectionMatrix(cam.combined);
         batch.enableBlending();
         batch.begin();
+        batch.draw(toDraw, 0,0,FRUTSUM_W, FRUTSUM_H);
 
         // loop through everything
         for (Entity entity : renderQueue) {
