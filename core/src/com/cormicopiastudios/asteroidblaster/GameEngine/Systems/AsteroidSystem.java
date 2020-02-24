@@ -35,13 +35,23 @@ public class AsteroidSystem extends IteratingSystem {
         B2BodyComponent body = bm.get(entity);
         TransformComponent position = tm.get(entity);
 
-        float dist = asteroid.intialPos.dst(new Vector2(position.position.x, position.position.y));
-        if (dist > 28) {
-//            Gdx.app.log("Asteroid System", String.valueOf(new Vector2(asteroid.intialPos.x,asteroid.intialPos.y)));
-            position.position.set(asteroid.intialPos.x,asteroid.intialPos.y, 0);
-            body.body.setTransform(new Vector2(asteroid.intialPos.x,asteroid.intialPos.y), body.body.getAngle());
 
+        if (position.position.x < 0 || position.position.y < 0 || position.position.x > 30 || position.position.y > 35) {
+            asteroid.timeOffScreen += deltaTime;
+        } else {
+            asteroid.timeOffScreen = 0.f;
         }
+
+        if (asteroid.timeOffScreen > 2) {
+            asteroid.isDead = true;
+        }
+
+//        float dist = asteroid.intialPos.dst(new Vector2(position.position.x, position.position.y));
+//        if (dist > 28) {
+//            position.position.set(asteroid.intialPos.x,asteroid.intialPos.y, 0);
+//            body.body.setTransform(new Vector2(asteroid.intialPos.x,asteroid.intialPos.y), body.body.getAngle());
+//
+//        }
         if (asteroid.isDead) {
             body.isDead = true;
         }
