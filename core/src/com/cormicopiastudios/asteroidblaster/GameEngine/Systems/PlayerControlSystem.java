@@ -52,13 +52,7 @@ public class PlayerControlSystem extends IteratingSystem {
         StateComponent state = sm.get(entity);
         PlayerComponent player = pm.get(entity);
 
-//        if (player.offScreen) {
-//            Gdx.app.log("OFF SCREEN", "Region Update");
-//            entity.getComponent(TextureComponent.class).region =
-//                    assetController.manager.get(assetController.arrowPix, TextureAtlas.class).findRegion("Arrow");
-//        }
-
-
+        
         int maxSpeed = 5;
         if(controller.left && b2body.body.getLinearVelocity().x > -maxSpeed){
             b2body.body.applyLinearImpulse(new Vector2(-.5f,0), b2body.body.getWorldCenter(), true);

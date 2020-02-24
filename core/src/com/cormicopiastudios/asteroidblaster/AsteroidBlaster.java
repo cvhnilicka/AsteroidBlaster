@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.AssetController;
 import com.cormicopiastudios.asteroidblaster.GameEngine.GameMaster;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Views.GameOver;
@@ -43,9 +44,6 @@ public class AsteroidBlaster extends Game {
 			break;
 			case GAME: if (gameMaster == null) gameMaster = new GameMaster(this);
 			break;
-//			case GAMEOVER: if (gameOver == null) gameOver = new GameOver();
-//			this.setScreen(gameOver);
-//			break;
 		}
 	}
 
@@ -64,6 +62,7 @@ public class AsteroidBlaster extends Game {
 		assetController.queueAddImages();
 		assetController.queueMenuButtons();
 		assetController.manager.finishLoading();
+//		this.background = assetController.manager.get()
 		// set screen to loading screen
 		changeScreen(LOADING);
 	}
@@ -71,6 +70,7 @@ public class AsteroidBlaster extends Game {
 	@Override
 	public void render () {
 		super.render();
+
 	}
 	
 	@Override
