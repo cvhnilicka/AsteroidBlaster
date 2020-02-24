@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IntervalIteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -69,6 +70,17 @@ public class PhysicsSystem extends IntervalIteratingSystem {
                 }
                 tfm.rotation = rot-90f;
                 bodyComp.body.setTransform(pos, MathUtils.degreesToRadians * tfm.rotation);
+
+                if (tfm.position.x < 0 || tfm.position.y < 0 || tfm.position.x > 30 || tfm.position.y > 35) {
+                    ent.getComponent(PlayerComponent.class).offscreenTimer += MAX_STEP_TIME;
+                } else {
+                    ent.getComponent(PlayerComponent.class).offscreenTimer = 0.f;
+                }
+
+                if (ent.getComponent(PlayerComponent.class).offscreenTimer > 3) {
+                    Gdx.app.log("Off screen", "Should be dead");
+                }
+
             } else if (ent.getComponent(TypeComponent.class).type == TypeComponent.ENEMY) {
                 bodyComp.body.setLinearVelocity(ent.getComponent(AsteroidComponent.class).speed);
             } else if (ent.getComponent(TypeComponent.class).type == TypeComponent.BULLET) {
@@ -84,10 +96,6 @@ public class PhysicsSystem extends IntervalIteratingSystem {
                 lvlf.createAsteroid(lvlf.getAsteroidSpawn());
             }
 
-//            else {
-//                tfm.rotation = bodyComp.body.getAngle() * MathUtils.radiansToDegrees;
-//            }
-            // **********************************************************
         }
         bodiesQueue.clear();
 
