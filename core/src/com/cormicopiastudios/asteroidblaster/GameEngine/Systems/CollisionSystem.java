@@ -15,6 +15,7 @@ import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StarComponent
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StateComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Views.PlayScreen;
 
 public class CollisionSystem extends IteratingSystem {
 
@@ -22,11 +23,13 @@ public class CollisionSystem extends IteratingSystem {
     ComponentMapper<CollisionComponent> cm;
     ComponentMapper<PlayerComponent> pm;
 
+    private PlayScreen parent;
+
     @SuppressWarnings("unchecked")
-    public CollisionSystem() {
+    public CollisionSystem(PlayScreen parent) {
         // only need to worry about play collision for now
         super (Family.all(CollisionComponent.class).get());
-
+        this.parent = parent;
         cm = ComponentMapper.getFor(CollisionComponent.class);
         pm = ComponentMapper.getFor(PlayerComponent.class);
     }
@@ -58,8 +61,10 @@ public class CollisionSystem extends IteratingSystem {
                             break;
                             case TypeComponent.SHOOTINGSTAR:
                                 Gdx.app.log("Collision System", "Player Hit star");
-                                if (entity.getComponent(PlayerComponent.class).numStars < 3)
+                                if (entity.getComponent(PlayerComponent.class).numStars < 3) {
                                     entity.getComponent(PlayerComponent.class).numStars += 1;
+                                    this.parent.getHud().updateStars((int)entity.getComponent(PlayerComponent.class).numStars);
+                                }
                                 collidedEntity.getComponent(StarComponent.class).isDead = true;
                     }
                     cc.collisionEntity = null; // reset
@@ -95,6 +100,7 @@ public class CollisionSystem extends IteratingSystem {
                             StateComponent asteroidState = ComponentMapper.getFor(StateComponent.class).get(entity);
                             asteroidState.set(StateComponent.ASTEROID_DEAD);
                             collidedEntity.getComponent(BulletComponent.class).isDead = true;
+                            this.parent.getHud().addScore();
                             System.out.println("enemy got shot");
                         default:
                             System.out.println("No matching type found");

@@ -13,6 +13,7 @@ import com.cormicopiastudios.asteroidblaster.AsteroidBlaster;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TextureComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.GameMaster;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Views.Hud;
 
 import java.util.Comparator;
 
@@ -58,6 +59,9 @@ public class RenderingSystem extends SortedIteratingSystem {
     private ComponentMapper<TransformComponent> transformM;
 
 
+    private Hud hud;
+
+
     @SuppressWarnings("unchecked")
     public RenderingSystem(SpriteBatch batch) {
         super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
@@ -73,6 +77,8 @@ public class RenderingSystem extends SortedIteratingSystem {
         this.batch = batch;
         cam = new OrthographicCamera(FRUTSUM_W, FRUTSUM_H);
         cam.position.set(FRUTSUM_W/2.f, FRUTSUM_H/2.f,0);
+//        hud = new Hud(this, batch);
+
     }
 
     @Override
@@ -102,16 +108,11 @@ public class RenderingSystem extends SortedIteratingSystem {
                 continue;
             }
 
-//            float width = tex.texture.getWidth()/10;
-//            float height = tex.texture.getHeight()/10;
-
             float width = tex.region.getRegionWidth();
             float height = tex.region.getRegionHeight();
 
             float originX = width/2.f;
             float originY = height/2.f;
-
-//            Gdx.app.log("RenderSystem", "Texture " + tex.texture.toString());
 
             batch.draw(tex.region,
                     trans.position.x - originX, trans.position.y - originY,
@@ -119,31 +120,12 @@ public class RenderingSystem extends SortedIteratingSystem {
                     width, height,
                     PixelsToMeters(trans.scale.x), PixelsToMeters(trans.scale.y),
                     trans.rotation);
-//            batch.draw(tex.region,
-//                    trans.position.x - originX,
-//                    trans.position.y - originY,
-//                    (int)originX,
-//                    (int)originY,
-//                    (int)width,
-//                    (int)height
-//            );
 
-
-//            batch.draw(tex.texture,
-//                    trans.position.x - originX,
-//                    trans.position.y - originY,
-//                    originX,
-//                    originY,
-//                    width,
-//                    height,
-//                    PixelsToMeters(trans.scale.x),
-//                    PixelsToMeters(trans.scale.y),
-//                    trans.rotation,
-//                    0,0,tex.texture.getWidth(),tex.texture.getHeight(),false,false
-//            );
         }
 
         batch.end();
+//        hud.stage.draw();
+
         renderQueue.clear();
     }
 
