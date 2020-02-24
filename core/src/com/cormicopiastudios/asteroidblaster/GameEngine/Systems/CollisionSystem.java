@@ -84,7 +84,6 @@ public class CollisionSystem extends IteratingSystem {
                             System.out.println("enemy hit enemy");
                             B2BodyComponent body = ComponentMapper.getFor(B2BodyComponent.class).get(entity);
                             Vector2 vel = body.body.getLinearVelocity();
-//                            asteroid.speed = new Vector2(vel.x*-1, vel.y*-1);
                             asteroid.speed = calculateReflection(collidedEntity,entity);
                             collidedEntity.getComponent(AsteroidComponent.class).speed = calculateReflection(entity,collidedEntity);
 
@@ -96,7 +95,6 @@ public class CollisionSystem extends IteratingSystem {
                             System.out.println("enemy hit other");
                             break;
                         case TypeComponent.BULLET:
-//                            asteroid.isDead = true;
                             StateComponent asteroidState = ComponentMapper.getFor(StateComponent.class).get(entity);
                             asteroidState.set(StateComponent.ASTEROID_DEAD);
                             collidedEntity.getComponent(BulletComponent.class).isDead = true;

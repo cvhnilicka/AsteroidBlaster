@@ -9,4 +9,6 @@ public class PlayerComponent implements Component {
     public float timeSinceLastShot = 0.f;
     public float shootDelay = 0.3f;
     public float numStars = 0f;
+    public float timeSinceLastStar = 0.f;
+    public float starDelay = 1.f;
 }

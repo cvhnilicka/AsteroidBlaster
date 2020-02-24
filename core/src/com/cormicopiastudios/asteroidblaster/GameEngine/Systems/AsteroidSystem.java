@@ -48,4 +48,8 @@ public class AsteroidSystem extends IteratingSystem {
 
 
     }
+
+    public void useStar() {
+
+    }
 }

@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class InputController implements InputProcessor {
 
-    public boolean left,right,up,down;
+    public boolean left,right,up,down, space;
 
 
 
@@ -48,6 +48,10 @@ public class InputController implements InputProcessor {
             case Keys.S:
                 down=true;
                 keyProcessed = true;
+                break;
+            case Keys.SPACE:
+                space = true;
+                keyProcessed = true;
         }
         return keyProcessed;	//  return our peyProcessed flag
     }
@@ -83,6 +87,10 @@ public class InputController implements InputProcessor {
                 keyProcessed = true;	// we have reacted to a keypress
             case Keys.S:
                 down=false;
+                keyProcessed = true;
+                break;
+            case Keys.SPACE:
+                space = false;
                 keyProcessed = true;
         }
         return keyProcessed;	//  return our peyProcessed flag
