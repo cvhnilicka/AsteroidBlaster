@@ -12,4 +12,5 @@ public class PlayerComponent implements Component {
     public float timeSinceLastStar = 0.f;
     public float starDelay = 1.f;
     public float offscreenTimer = 0.f;
+    public boolean offScreen = false;
 }

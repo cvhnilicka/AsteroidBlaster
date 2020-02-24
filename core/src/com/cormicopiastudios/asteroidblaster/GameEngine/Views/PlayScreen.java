@@ -57,7 +57,7 @@ public class PlayScreen implements Screen {
         assetController = gameMaster.getAssetController();
 
         batch = new SpriteBatch();
-        RenderingSystem renderingSystem = new RenderingSystem(batch);
+        RenderingSystem renderingSystem = new RenderingSystem(batch, this);
         hud = new Hud(renderingSystem, batch);
         gamecam = renderingSystem.getCamera();
         batch.setProjectionMatrix(gamecam.combined);
@@ -75,7 +75,7 @@ public class PlayScreen implements Screen {
         engine.addSystem(new CollisionSystem(this));
         AsteroidSystem as = new AsteroidSystem(levelFactory);
         engine.addSystem(as);
-        engine.addSystem(new PlayerControlSystem(inputController, levelFactory, engine, hud));
+        engine.addSystem(new PlayerControlSystem(inputController, levelFactory, engine, hud, assetController));
         engine.addSystem(new BulletSystem(levelFactory.getPlayer()));
         engine.addSystem(new StarSystem(levelFactory));
 

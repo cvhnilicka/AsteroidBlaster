@@ -7,13 +7,18 @@ import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.cormicopiastudios.asteroidblaster.AsteroidBlaster;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TextureComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.GameMaster;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Views.Hud;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Views.PlayScreen;
 
 import java.util.Comparator;
 
@@ -60,12 +65,13 @@ public class RenderingSystem extends SortedIteratingSystem {
 
 
     private Hud hud;
+    private PlayScreen parent;
 
 
     @SuppressWarnings("unchecked")
-    public RenderingSystem(SpriteBatch batch) {
+    public RenderingSystem(SpriteBatch batch, PlayScreen parent) {
         super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
-
+        this.parent = parent;
         // create component mappers
         textureM = ComponentMapper.getFor(TextureComponent.class);
         transformM = ComponentMapper.getFor(TransformComponent.class);
@@ -114,13 +120,53 @@ public class RenderingSystem extends SortedIteratingSystem {
             float originX = width/2.f;
             float originY = height/2.f;
 
-            batch.draw(tex.region,
-                    trans.position.x - originX, trans.position.y - originY,
-                    originX, originY,
-                    width, height,
-                    PixelsToMeters(trans.scale.x), PixelsToMeters(trans.scale.y),
-                    trans.rotation);
+            if (entity.getComponent(TypeComponent.class).type == TypeComponent.PLAYER &&
+            entity.getComponent(PlayerComponent.class).offScreen) {
+                TextureRegion arrow = parent.getAssetController().manager.get(parent.getAssetController().arrowPix, TextureAtlas.class).findRegion("Arrow");
+                if (trans.position.y > 25) {
+                    // to far up
+                    batch.draw(arrow,
+                            trans.position.x - originX, 8,
+                            originX, 16,
+                            width, 32,
+                            PixelsToMeters(trans.scale.x), PixelsToMeters(trans.scale.y),
+                            trans.rotation-180);
+                } else if (trans.position.x > 30) {
+                    // to far right
+                    batch.draw(arrow,
+                            30 - originX, trans.position.y - originY,
+                            originX, originY,
+                            width, 32,
+                            PixelsToMeters(trans.scale.x), PixelsToMeters(trans.scale.y),
+                            trans.rotation-180);
+                } else if (trans.position.x < 0) {
+                    // to far left
+                    batch.draw(arrow,
+                            -16, trans.position.y - originY,
+                            originX, originY,
+                            width, 32,
+                            PixelsToMeters(trans.scale.x), PixelsToMeters(trans.scale.y),
+                            trans.rotation-180);
+                } else if (trans.position.y < 0) {
+                    // to far down
+                    batch.draw(arrow,
+                            trans.position.x - originX, -32,
+                            originX, originY,
+                            width, 32,
+                            PixelsToMeters(trans.scale.x), PixelsToMeters(trans.scale.y),
+                            trans.rotation-180);
+                }
 
+
+            } else {
+
+                batch.draw(tex.region,
+                        trans.position.x - originX, trans.position.y - originY,
+                        originX, originY,
+                        width, height,
+                        PixelsToMeters(trans.scale.x), PixelsToMeters(trans.scale.y),
+                        trans.rotation);
+            }
         }
 
         batch.end();

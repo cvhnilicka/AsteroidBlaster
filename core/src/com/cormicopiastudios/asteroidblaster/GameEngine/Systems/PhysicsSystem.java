@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IntervalIteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -16,6 +17,7 @@ import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyCompone
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StarComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StateComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TextureComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.InputController;
@@ -74,10 +76,13 @@ public class PhysicsSystem extends IntervalIteratingSystem {
                 tfm.rotation = rot-90f;
                 bodyComp.body.setTransform(pos, MathUtils.degreesToRadians * tfm.rotation);
 
-                if (tfm.position.x < 0 || tfm.position.y < 0 || tfm.position.x > 30 || tfm.position.y > 35) {
+                if (tfm.position.x < 0 || tfm.position.y < 0 || tfm.position.x > 30 || tfm.position.y > 25) {
                     ent.getComponent(PlayerComponent.class).offscreenTimer += MAX_STEP_TIME;
+                    ent.getComponent(PlayerComponent.class).offScreen = true;
+                    ent.getComponent(TextureComponent.class).region = parent.getAssetController().manager.get(parent.getAssetController().arrowPix, TextureAtlas.class).findRegion("Arrow");
                 } else {
                     ent.getComponent(PlayerComponent.class).offscreenTimer = 0.f;
+                    ent.getComponent(PlayerComponent.class).offScreen = false;
                 }
 
                 if (ent.getComponent(PlayerComponent.class).offscreenTimer > 3) {
