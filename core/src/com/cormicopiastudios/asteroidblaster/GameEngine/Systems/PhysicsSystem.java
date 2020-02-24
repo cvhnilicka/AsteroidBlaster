@@ -90,7 +90,6 @@ public class PhysicsSystem extends IntervalIteratingSystem {
                 bodyComp.body.setAngularVelocity(tfm.rotation);
             }
             if(bodyComp.isDead){
-                System.out.println("Removing a body and entity");
                 world.destroyBody(bodyComp.body);
                 engine.removeEntity(ent);
                 lvlf.createAsteroid(lvlf.getAsteroidSpawn());

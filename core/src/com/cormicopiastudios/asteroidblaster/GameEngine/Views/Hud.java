@@ -71,6 +71,10 @@ public class Hud implements Disposable {
 //
 //    }
 
+    public int getScore() {
+        return this.score;
+    }
+
     public void addScore() {
         this.score += 1;
         scoreHolderLabel.setText(String.format("%03d", score));

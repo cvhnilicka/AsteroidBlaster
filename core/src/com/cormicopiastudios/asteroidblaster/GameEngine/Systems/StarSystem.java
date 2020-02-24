@@ -38,19 +38,25 @@ public class StarSystem extends IteratingSystem {
         TransformComponent position = tm.get(entity);
         StateComponent state = stm.get(entity);
 
-        if (star.isDead) {
-            body.isDead = true;
-            return;
-        }
+
 
         state.time += deltaTime;
 
+        if (position.position.x < 0 || position.position.y < 0 || position.position.x > 30 || position.position.y > 35) {
+            star.timeOffScreen += deltaTime;
+        } else {
+            star.timeOffScreen = 0f;
+        }
+
         float dist = star.startingPosition.dst(new Vector2(position.position.x,position.position.y));
 
-        if (state.time > 15 || dist > 40) {
-            Gdx.app.log("Star System", "New Star");
+        if (state.time > 15 || dist > 40 || star.timeOffScreen >= 4) {
             star.isDead = true;
+        }
+        if (star.isDead) {
             body.isDead = true;
+            lvlF.removeStar();
+            return;
         }
 
     }

@@ -10,6 +10,7 @@ public class StarComponent implements Component, Pool.Poolable {
     public  float yVel = 0;
     public Vector2 velocity = new Vector2();
     public Vector2 startingPosition = new Vector2();
+    public float timeOffScreen = 0f;
     @Override
     public void reset() {
         isDead = false;
