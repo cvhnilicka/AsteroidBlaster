@@ -80,7 +80,7 @@ public class LevelFactory {
         createAsteroid(0,25);
         createAsteroid(30,0);
         createAsteroid(30,25);
-//        createAsteroid(0,35);
+        createAsteroid(0,35);
     }
 
     private void setBucketMappings() {

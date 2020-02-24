@@ -9,12 +9,14 @@ public class AsteroidComponent implements Component, Pool.Poolable {
     public Vector2 speed = new Vector2();
     public  Vector2 intialPos = new Vector2();
     public boolean isDead = false;
+    public float timeOffScreen = 0.f;
 
     @Override
     public void reset() {
         speed = new Vector2();
         intialPos = new Vector2();
         isDead = false;
+        timeOffScreen = 0.f;
     }
 
 }
