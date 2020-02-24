@@ -3,13 +3,17 @@ package com.cormicopiastudios.asteroidblaster.Menus;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.cormicopiastudios.asteroidblaster.AsteroidBlaster;
 
@@ -18,9 +22,13 @@ public class MainMenu implements Screen {
     private Stage stage;
     private Skin skin; // will temp use a skin
 
+    private TextureAtlas atlas;
+
     public MainMenu(AsteroidBlaster parent) {
         this.parent = parent;
         stage = new Stage(new ScreenViewport());
+        this.atlas = parent.getAssetController().manager.get(parent.getAssetController().newGamePix,
+                TextureAtlas.class);
     }
 
     @Override
@@ -40,11 +48,15 @@ public class MainMenu implements Screen {
 
         skin = new Skin(Gdx.files.internal("skin/shade/uiskin.json"));
 
-        TextButton newGame = new TextButton("New Game", skin);
+//        TextButton newGame = new TextButton("New Game", skin);
+        TextureRegionDrawable dr = new TextureRegionDrawable(atlas.findRegion("NewGameBtn"));
+        dr.setMinSize(200,150);
+        ImageButton newGame = new ImageButton(dr);
         TextButton preferences = new TextButton("Preferences", skin);
         TextButton exit = new TextButton("Exit", skin);
 
-        table.add(newGame).height(Value.percentHeight(0.20f, table)).fillX().uniform();
+//        table.add(newGame).height(Value.percentHeight(0.20f, table)).fillX().uniform();
+        table.add(newGame).width(Value.percentWidth(0.4f, table)).fillX().uniform();
         table.row().pad(10,0,10,0);
         table.add(preferences).height(Value.percentHeight(0.20f, table)).fillX().uniform();
         table.row().pad(10,0,10,0);
