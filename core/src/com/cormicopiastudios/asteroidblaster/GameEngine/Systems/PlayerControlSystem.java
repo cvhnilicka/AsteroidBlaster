@@ -3,16 +3,20 @@ package com.cormicopiastudios.asteroidblaster.GameEngine.Systems;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.AsteroidComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StarComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StateComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.InputController;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Factories.LevelFactory;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Views.Hud;
 
 public class PlayerControlSystem extends IteratingSystem {
 
@@ -20,17 +24,21 @@ public class PlayerControlSystem extends IteratingSystem {
     ComponentMapper<B2BodyComponent> b2m;
     ComponentMapper<StateComponent> sm;
     private LevelFactory lvlF;
+    private PooledEngine en;
 
     InputController controller;
+    private Hud hud;
 
     @SuppressWarnings("unchecked")
-    public PlayerControlSystem(InputController controller, LevelFactory lvlF) {
+    public PlayerControlSystem(InputController controller, LevelFactory lvlF, PooledEngine en, Hud hud) {
         super(Family.all(PlayerComponent.class).get());
         this.controller = controller;
+        this.en = en;
         pm = ComponentMapper.getFor(PlayerComponent.class);
         b2m = ComponentMapper.getFor(B2BodyComponent.class);
         sm = ComponentMapper.getFor(StateComponent.class);
         this.lvlF = lvlF;
+        this.hud = hud;
     }
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
@@ -54,6 +62,16 @@ public class PlayerControlSystem extends IteratingSystem {
 
             b2body.body.applyLinearImpulse(new Vector2(0,-.5f), b2body.body.getWorldCenter(), true);
 
+        }
+
+        if (controller.space && player.numStars > 0 && player.timeSinceLastStar <= 0) {
+            Gdx.app.log("Player Controller", "Using Star!");
+            player.timeSinceLastStar = player.starDelay;
+            for (Entity roid : en.getEntitiesFor(Family.all(AsteroidComponent.class).get())) {
+                sm.get(roid).set(StateComponent.ASTEROID_DEAD);
+            }
+            player.numStars -= 1;
+            hud.updateStars((int)player.numStars);
         }
 
 
@@ -86,5 +104,6 @@ public class PlayerControlSystem extends IteratingSystem {
 
         }
         player.timeSinceLastShot -= deltaTime;
+        player.timeSinceLastStar -= deltaTime;
     }
 }

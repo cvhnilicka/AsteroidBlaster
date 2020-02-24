@@ -73,9 +73,10 @@ public class PlayScreen implements Screen {
         engine.addSystem(new PhysicsSystem(world, inputController, (PooledEngine)engine, levelFactory));
         engine.addSystem(new PhysicsDebugSystem(world, renderingSystem.getCamera()));
         engine.addSystem(new CollisionSystem(this));
-        engine.addSystem(new PlayerControlSystem(inputController, levelFactory));
+        AsteroidSystem as = new AsteroidSystem(levelFactory);
+        engine.addSystem(as);
+        engine.addSystem(new PlayerControlSystem(inputController, levelFactory, engine, hud));
         engine.addSystem(new BulletSystem(levelFactory.getPlayer()));
-        engine.addSystem(new AsteroidSystem(levelFactory));
         engine.addSystem(new StarSystem(levelFactory));
 
 
