@@ -40,6 +40,9 @@ public class PlayScreen implements Screen {
     private LevelFactory levelFactory;
 
 
+    private Hud hud;
+
+
     private SpriteBatch batch;
 
 
@@ -55,6 +58,7 @@ public class PlayScreen implements Screen {
 
         batch = new SpriteBatch();
         RenderingSystem renderingSystem = new RenderingSystem(batch);
+        hud = new Hud(renderingSystem, batch);
         gamecam = renderingSystem.getCamera();
         batch.setProjectionMatrix(gamecam.combined);
 
@@ -68,7 +72,7 @@ public class PlayScreen implements Screen {
         engine.addSystem(renderingSystem);
         engine.addSystem(new PhysicsSystem(world, inputController, (PooledEngine)engine, levelFactory));
         engine.addSystem(new PhysicsDebugSystem(world, renderingSystem.getCamera()));
-        engine.addSystem(new CollisionSystem());
+        engine.addSystem(new CollisionSystem(this));
         engine.addSystem(new PlayerControlSystem(inputController, levelFactory));
         engine.addSystem(new BulletSystem(levelFactory.getPlayer()));
         engine.addSystem(new AsteroidSystem(levelFactory));
@@ -87,12 +91,15 @@ public class PlayScreen implements Screen {
 
     }
 
+    public Hud getHud() { return this.hud; }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         engine.update(delta);
+        hud.stage.draw();
     }
 
     @Override
