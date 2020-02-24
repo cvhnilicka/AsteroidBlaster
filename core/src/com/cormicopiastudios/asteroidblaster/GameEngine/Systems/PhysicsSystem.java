@@ -20,6 +20,7 @@ import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComp
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.InputController;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Factories.LevelFactory;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Views.PlayScreen;
 
 public class PhysicsSystem extends IntervalIteratingSystem {
 
@@ -33,16 +34,18 @@ public class PhysicsSystem extends IntervalIteratingSystem {
     private ComponentMapper<TransformComponent> tm = ComponentMapper.getFor(TransformComponent.class);
     private PooledEngine engine;
     private LevelFactory lvlf;
+    private PlayScreen parent;
 
 
     @SuppressWarnings("unchecked")
-    public PhysicsSystem(World world, InputController controller, PooledEngine en, LevelFactory lvlf) {
+    public PhysicsSystem(World world, InputController controller, PooledEngine en, LevelFactory lvlf, PlayScreen parent) {
         super(Family.all().get(), MAX_STEP_TIME);
         this.world = world;
         this.controller = controller;
         this.bodiesQueue = new Array<Entity>();
         this.engine = en;
         this.lvlf = lvlf;
+        this.parent = parent;
     }
 
     @Override
@@ -79,6 +82,7 @@ public class PhysicsSystem extends IntervalIteratingSystem {
 
                 if (ent.getComponent(PlayerComponent.class).offscreenTimer > 3) {
                     Gdx.app.log("Off screen", "Should be dead");
+                    this.parent.setGameOver();
                 }
 
             } else if (ent.getComponent(TypeComponent.class).type == TypeComponent.ENEMY) {

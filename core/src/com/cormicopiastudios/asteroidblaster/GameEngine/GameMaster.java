@@ -3,6 +3,7 @@ package com.cormicopiastudios.asteroidblaster.GameEngine;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.cormicopiastudios.asteroidblaster.AsteroidBlaster;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.AsteroidComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.AssetController;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Views.PlayScreen;
 
@@ -31,6 +32,10 @@ public class GameMaster extends Game {
 
     public AssetController getAssetController() {
         return assetController;
+    }
+
+    public void gameOver(int score) {
+        this.parent.gameOverScreen(score);
     }
 
     @Override
