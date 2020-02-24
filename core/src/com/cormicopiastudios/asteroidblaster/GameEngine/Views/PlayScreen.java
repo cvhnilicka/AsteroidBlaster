@@ -65,7 +65,7 @@ public class PlayScreen implements Screen {
         // create pooled engine
         engine = new PooledEngine();
 
-        levelFactory = new LevelFactory(world, (PooledEngine)engine, this);
+        levelFactory = new LevelFactory(world, engine, this);
 
         // lets add the systems. they run in the order you add them
         engine.addSystem(new AnimationSystem());

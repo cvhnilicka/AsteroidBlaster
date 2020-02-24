@@ -73,29 +73,18 @@ public class CollisionSystem extends IteratingSystem {
                 TypeComponent type = collidedEntity.getComponent(TypeComponent.class);
                 if(type != null){
                     switch(type.type){
-                        case TypeComponent.PLAYER:
-                            System.out.println("enemy hit player");
-                            break;
                         case TypeComponent.ENEMY:
-                            System.out.println("enemy hit enemy");
                             B2BodyComponent body = ComponentMapper.getFor(B2BodyComponent.class).get(entity);
                             Vector2 vel = body.body.getLinearVelocity();
                             asteroid.speed = calculateReflection(collidedEntity,entity);
                             collidedEntity.getComponent(AsteroidComponent.class).speed = calculateReflection(entity,collidedEntity);
-
-                            break;
-                        case TypeComponent.SCENERY:
-                            System.out.println("enemy hit scenery");
-                            break;
-                        case TypeComponent.OTHER:
-                            System.out.println("enemy hit other");
                             break;
                         case TypeComponent.BULLET:
                             StateComponent asteroidState = ComponentMapper.getFor(StateComponent.class).get(entity);
                             asteroidState.set(StateComponent.ASTEROID_DEAD);
                             collidedEntity.getComponent(BulletComponent.class).isDead = true;
                             this.parent.getHud().addScore();
-                            System.out.println("enemy got shot");
+                            break;
                         default:
                             System.out.println("No matching type found");
                     }

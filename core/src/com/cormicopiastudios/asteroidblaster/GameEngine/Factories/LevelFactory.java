@@ -30,7 +30,9 @@ import java.util.Random;
 public class LevelFactory {
 
     private int level = 0;
-    private int numAsteroids = 3;
+    private int numAsteroids;
+
+    private int stars;
 
     private World world;
     private PooledEngine engine;
@@ -64,6 +66,8 @@ public class LevelFactory {
         bucketMappings = new String[360];
         this.screenXMax = this.parent.getGamecam().viewportWidth;
         this.screenYMax = this.parent.getGamecam().viewportHeight;
+        numAsteroids = 0;
+        stars = 0;
         createPlayer();
         initialAsteroids();
         createStar();
@@ -76,11 +80,15 @@ public class LevelFactory {
 
 
     public void initialAsteroids() {
-        createAsteroid(0,0);
-        createAsteroid(0,25);
-        createAsteroid(30,0);
-        createAsteroid(30,25);
-        createAsteroid(0,35);
+//        createAsteroid(0,0);
+//        createAsteroid(0,25);
+//        createAsteroid(30,0);
+//        createAsteroid(30,25);
+//        createAsteroid(0,35);
+        createAsteroid(getAsteroidSpawn());
+        createAsteroid(getAsteroidSpawn());
+        createAsteroid(getAsteroidSpawn());
+
     }
 
     private void setBucketMappings() {
@@ -157,10 +165,8 @@ public class LevelFactory {
         Vector2 spawnloc = getStarSpawn();
 
         float sX, sY;
-//        sX = spawnloc.x;
-//        sY = spawnloc.y;
-        sX = 0;
-        sY = 20;
+        sX = spawnloc.x;
+        sY = spawnloc.y;
         Entity entity = engine.createEntity();
 
         B2BodyComponent body = engine.createComponent(B2BodyComponent.class);
@@ -203,10 +209,11 @@ public class LevelFactory {
         entity.add(state);
 
         engine.addEntity(entity);
+        stars += 1;
 
     }
 
-    public void createAsteroid(float posx, float posy) {
+    private void createAsteroid(float posx, float posy) {
         // logic to add an asteroid
         Entity entity = engine.createEntity();
         B2BodyComponent b2body = engine.createComponent(B2BodyComponent.class);
@@ -249,11 +256,20 @@ public class LevelFactory {
 
     }
 
+    public void removeStar() {
+        this.stars -= 1;
+    }
+
     public void createAsteroid(Vector2 location) {
         if (numAsteroids <= 20)
             createAsteroid(location.x,location.y);
         else
             numAsteroids += 1;
+        this.level = this.parent.getHud().getScore();
+        if (this.level % 7 == 0 && this.level > 0 && this.stars < 1) {
+            createStar();
+            this.level = 0;
+        }
     }
 
     private void createPlayer() {
@@ -272,7 +288,8 @@ public class LevelFactory {
         StateComponent stateComponent = engine.createComponent(StateComponent.class);
 //
         // create the data for the components
-        b2BodyComponent.body = bodyFactory.makeBoxPolyBody(posx,posy,1,2,BodyFactory.FIXTURE_TYPE.STEEL, BodyDef.BodyType.DynamicBody,true);
+        b2BodyComponent.body = bodyFactory.makeBoxPolyBody(posx,posy,1,2,
+                BodyFactory.FIXTURE_TYPE.STEEL, BodyDef.BodyType.DynamicBody,true);
 
         // set object pos
         transformComponent.position.set(posx,posy,0);
@@ -331,8 +348,6 @@ public class LevelFactory {
 
     public Vector2 getObjectSpawn(){
         Random ran = new Random();
-//        Gdx.app.log("Screen Width: ", String.valueOf(this.parent.getGamecam().viewportWidth));
-//        Gdx.app.log("Screen Height: ", String.valueOf(this.parent.getGamecam().viewportHeight));
 
         float xmin = -5,
                 xmax = this.screenXMax+5,
