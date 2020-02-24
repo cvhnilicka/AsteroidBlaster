@@ -43,7 +43,6 @@ public class CollisionSystem extends IteratingSystem {
         Entity collidedEntity = cc.collisionEntity;
 
         TypeComponent thisType = entity.getComponent(TypeComponent.class);
-//        Gdx.app.log("Collision System", " This type: " + thisType.type);
         // do player collisions
         if (thisType.type == TypeComponent.PLAYER) {
             if (collidedEntity != null) {
@@ -51,16 +50,14 @@ public class CollisionSystem extends IteratingSystem {
                 if (type != null) {
                     switch (type.type) {
                         case TypeComponent.ENEMY:
-//                            Gdx.app.log("Collision System", "Collided with enemy type");
+                            entity.getComponent(B2BodyComponent.class).body.applyLinearImpulse(calculateBounce(entity,collidedEntity),
+                                    entity.getComponent(B2BodyComponent.class).body.getWorldCenter(), true);
                             break;
                         case TypeComponent.SCENERY:
-//                            Gdx.app.log("Collision System", "Collided with scenery type");
                             break;
                         case TypeComponent.OTHER:
-//                            Gdx.app.log("Collision System", "Collided with other type");
                             break;
                             case TypeComponent.SHOOTINGSTAR:
-                                Gdx.app.log("Collision System", "Player Hit star");
                                 if (entity.getComponent(PlayerComponent.class).numStars < 3) {
                                     entity.getComponent(PlayerComponent.class).numStars += 1;
                                     this.parent.getHud().updateStars((int)entity.getComponent(PlayerComponent.class).numStars);
@@ -71,7 +68,6 @@ public class CollisionSystem extends IteratingSystem {
                 }
             }
         } else if (thisType.type == TypeComponent.ENEMY) {
-//            Gdx.app.log("CollisionSystem", "ENEMYYYYY");
             if(collidedEntity != null){
                 AsteroidComponent asteroid = ComponentMapper.getFor(AsteroidComponent.class).get(entity);
                 TypeComponent type = collidedEntity.getComponent(TypeComponent.class);
@@ -104,12 +100,36 @@ public class CollisionSystem extends IteratingSystem {
                             System.out.println("No matching type found");
                     }
                     cc.collisionEntity = null; // collision handled reset component
-                }else{
+                } else {
                     System.out.println("type == null");
                 }
             }
         }
     }
+
+
+    private Vector2 calculateBounce(Entity player, Entity asteroid) {
+
+        TransformComponent playerTrans = ComponentMapper.getFor(TransformComponent.class).get(player);
+        B2BodyComponent playerBody = ComponentMapper.getFor(B2BodyComponent.class).get(player);
+
+        TransformComponent collidedWTrans = ComponentMapper.getFor(TransformComponent.class).get(asteroid);
+        AsteroidComponent collidedWAsteroid = ComponentMapper.getFor(AsteroidComponent.class).get(asteroid);
+
+        Vector2 normal = new Vector2(-(collidedWTrans.position.y - playerTrans.position.y),
+                collidedWTrans.position.x - playerTrans.position.x);
+
+        float d = (float)Math.sqrt(normal.x*normal.x+normal.y*normal.y);
+        normal = new Vector2(normal.x/d,normal.y/d);
+        double velDot = Vector2.dot(normal.x,normal.y,playerBody.body.getLinearVelocity().x,
+                playerBody.body.getLinearVelocity().y);
+
+        Vector2 reflectionVelocity = new Vector2(playerBody.body.getLinearVelocity().x-2*(float)velDot*normal.x,
+                playerBody.body.getLinearVelocity().y-2*(float)velDot*normal.y);
+
+        return reflectionVelocity;
+    }
+
 
     private Vector2 calculateReflection(Entity collider, Entity collidedW) {
 
