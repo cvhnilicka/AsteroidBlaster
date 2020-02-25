@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.AnimationComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.AsteroidComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StateComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TextureComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
@@ -33,7 +34,8 @@ public class AnimationSystem extends IteratingSystem {
         AnimationComponent ani = am.get(entity);
         StateComponent state = sm.get(entity);
         TextureComponent tex = tm.get(entity);
-        if (entity.getComponent(TypeComponent.class).type == TypeComponent.PLAYER) {
+        if (entity.getComponent(TypeComponent.class).type == TypeComponent.PLAYER &&
+                !entity.getComponent(PlayerComponent.class).offScreen) {
             if (ani.animations.size > 0) {
                 tex.region = (TextureRegion) ani.animations.get(0).getKeyFrame(state.time, state.isLooping);
             }

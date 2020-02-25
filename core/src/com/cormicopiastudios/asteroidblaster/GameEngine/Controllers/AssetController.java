@@ -28,6 +28,8 @@ public class AssetController {
     public final String bulletPix  = "bullet/bullet.atlas";
     public final String starPix = "star/star.atlas";
     public final String newGamePix = "buttons/newgame.atlas";
+    public final String arrowPix = "arrow/arrow.atlas";
+    public final String backgroundPix = "background/background.atlas";
 
 
     // numbers
@@ -90,6 +92,9 @@ public class AssetController {
         manager.load(bulletPix, TextureAtlas.class);
         manager.load(starPix, TextureAtlas.class);
         manager.load(newGamePix, TextureAtlas.class);
+        manager.load(arrowPix, TextureAtlas.class);
+        manager.load(backgroundPix, TextureAtlas.class);
+
 
 
 

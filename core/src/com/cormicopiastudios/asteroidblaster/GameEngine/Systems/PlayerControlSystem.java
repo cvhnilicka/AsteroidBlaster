@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -14,9 +15,12 @@ import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyCompone
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StarComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StateComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TextureComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.AssetController;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.InputController;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Factories.LevelFactory;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Views.Hud;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Views.PlayScreen;
 
 public class PlayerControlSystem extends IteratingSystem {
 
@@ -28,12 +32,14 @@ public class PlayerControlSystem extends IteratingSystem {
 
     InputController controller;
     private Hud hud;
+    private AssetController assetController;
 
     @SuppressWarnings("unchecked")
-    public PlayerControlSystem(InputController controller, LevelFactory lvlF, PooledEngine en, Hud hud) {
+    public PlayerControlSystem(InputController controller, LevelFactory lvlF, PooledEngine en, Hud hud, AssetController assetController) {
         super(Family.all(PlayerComponent.class).get());
         this.controller = controller;
         this.en = en;
+        this.assetController = assetController;
         pm = ComponentMapper.getFor(PlayerComponent.class);
         b2m = ComponentMapper.getFor(B2BodyComponent.class);
         sm = ComponentMapper.getFor(StateComponent.class);
@@ -46,6 +52,7 @@ public class PlayerControlSystem extends IteratingSystem {
         StateComponent state = sm.get(entity);
         PlayerComponent player = pm.get(entity);
 
+        
         int maxSpeed = 5;
         if(controller.left && b2body.body.getLinearVelocity().x > -maxSpeed){
             b2body.body.applyLinearImpulse(new Vector2(-.5f,0), b2body.body.getWorldCenter(), true);

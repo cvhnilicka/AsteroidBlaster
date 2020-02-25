@@ -3,6 +3,9 @@ package com.cormicopiastudios.asteroidblaster.Menus;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -23,19 +26,37 @@ public class MainMenu implements Screen {
     private Skin skin; // will temp use a skin
 
     private TextureAtlas atlas;
+    private TextureAtlas backgroundAtlas;
+
+    private TextureRegion background;
+    private Sprite drawBackground;
+
+    SpriteBatch spriteBatch;
+    float stateTime;
+
+
+    private Animation backgroundAnim;
 
     public MainMenu(AsteroidBlaster parent) {
         this.parent = parent;
         stage = new Stage(new ScreenViewport());
         this.atlas = parent.getAssetController().manager.get(parent.getAssetController().newGamePix,
                 TextureAtlas.class);
+        this.backgroundAtlas = parent.getAssetController().manager.get(
+                parent.getAssetController().backgroundPix, TextureAtlas.class);
+
+        this.backgroundAnim = new Animation(0.1f, backgroundAtlas.findRegions("Background"));
+        backgroundAnim.setPlayMode(Animation.PlayMode.LOOP);
     }
 
     @Override
     public void show() {
         stage.clear();
         // set as input
+        spriteBatch = new SpriteBatch();
+        stateTime = 0.f;
         Gdx.input.setInputProcessor(stage);
+
 
         // Set the stage up
 
@@ -94,8 +115,17 @@ public class MainMenu implements Screen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // Actually render the scene you described in the show() method above.
+        TextureRegion toDraw = (TextureRegion)backgroundAnim.getKeyFrame(stateTime, true);
+
+
+        stateTime+=delta;
+        spriteBatch.begin();
+
+        spriteBatch.draw(toDraw,0,0,stage.getWidth(),stage.getHeight());
+        spriteBatch.end();
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+
     }
 
     @Override

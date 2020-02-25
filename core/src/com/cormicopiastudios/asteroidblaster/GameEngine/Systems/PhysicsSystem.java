@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IntervalIteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -16,10 +17,12 @@ import com.cormicopiastudios.asteroidblaster.GameEngine.Components.B2BodyCompone
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.PlayerComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StarComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.StateComponent;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TextureComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TransformComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Components.TypeComponent;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.InputController;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Factories.LevelFactory;
+import com.cormicopiastudios.asteroidblaster.GameEngine.Views.PlayScreen;
 
 public class PhysicsSystem extends IntervalIteratingSystem {
 
@@ -33,16 +36,18 @@ public class PhysicsSystem extends IntervalIteratingSystem {
     private ComponentMapper<TransformComponent> tm = ComponentMapper.getFor(TransformComponent.class);
     private PooledEngine engine;
     private LevelFactory lvlf;
+    private PlayScreen parent;
 
 
     @SuppressWarnings("unchecked")
-    public PhysicsSystem(World world, InputController controller, PooledEngine en, LevelFactory lvlf) {
+    public PhysicsSystem(World world, InputController controller, PooledEngine en, LevelFactory lvlf, PlayScreen parent) {
         super(Family.all().get(), MAX_STEP_TIME);
         this.world = world;
         this.controller = controller;
         this.bodiesQueue = new Array<Entity>();
         this.engine = en;
         this.lvlf = lvlf;
+        this.parent = parent;
     }
 
     @Override
@@ -71,14 +76,18 @@ public class PhysicsSystem extends IntervalIteratingSystem {
                 tfm.rotation = rot-90f;
                 bodyComp.body.setTransform(pos, MathUtils.degreesToRadians * tfm.rotation);
 
-                if (tfm.position.x < 0 || tfm.position.y < 0 || tfm.position.x > 30 || tfm.position.y > 35) {
+                if (tfm.position.x < 0 || tfm.position.y < 0 || tfm.position.x > 30 || tfm.position.y > 25) {
                     ent.getComponent(PlayerComponent.class).offscreenTimer += MAX_STEP_TIME;
+                    ent.getComponent(PlayerComponent.class).offScreen = true;
+                    ent.getComponent(TextureComponent.class).region = parent.getAssetController().manager.get(parent.getAssetController().arrowPix, TextureAtlas.class).findRegion("Arrow");
                 } else {
                     ent.getComponent(PlayerComponent.class).offscreenTimer = 0.f;
+                    ent.getComponent(PlayerComponent.class).offScreen = false;
                 }
 
                 if (ent.getComponent(PlayerComponent.class).offscreenTimer > 3) {
                     Gdx.app.log("Off screen", "Should be dead");
+                    this.parent.setGameOver();
                 }
 
             } else if (ent.getComponent(TypeComponent.class).type == TypeComponent.ENEMY) {
@@ -92,7 +101,6 @@ public class PhysicsSystem extends IntervalIteratingSystem {
             if(bodyComp.isDead){
                 world.destroyBody(bodyComp.body);
                 engine.removeEntity(ent);
-                lvlf.createAsteroid(lvlf.getAsteroidSpawn());
             }
 
         }

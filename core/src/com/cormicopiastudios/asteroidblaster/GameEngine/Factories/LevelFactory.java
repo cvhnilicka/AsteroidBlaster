@@ -1,6 +1,7 @@
 package com.cormicopiastudios.asteroidblaster.GameEngine.Factories;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -85,9 +86,10 @@ public class LevelFactory {
 //        createAsteroid(30,0);
 //        createAsteroid(30,25);
 //        createAsteroid(0,35);
-        createAsteroid(getAsteroidSpawn());
-        createAsteroid(getAsteroidSpawn());
-        createAsteroid(getAsteroidSpawn());
+        createAsteroid(getAsteroidSpawn().x, getAsteroidSpawn().y);
+        createAsteroid(getAsteroidSpawn().x, getAsteroidSpawn().y);
+        createAsteroid(getAsteroidSpawn().x, getAsteroidSpawn().y);
+        numAsteroids = 3;
 
     }
 
@@ -111,11 +113,6 @@ public class LevelFactory {
     // TODO private void addShootingStar()
     // TODO private void addWalls()
 
-
-//    public Vector2 getNextSpawn() {
-//        int angleOffset = 360/getNumSections();
-//
-//    }
 
     public Entity createBullet(float x, float y, float xVel, float yVel, Vector3 mPos) {
         Entity entity = engine.createEntity();
@@ -146,7 +143,6 @@ public class LevelFactory {
         position.scale.y = 1f;
         position.rotation = (float) Math.atan2((double) mPos.y - y, (double) mPos.x-x )*180f/(float)Math.PI;
         position.rotation -= 90f;
-
         entity.add(stateComponent);
         entity.add(animComp);
         entity.add(bul);
@@ -155,7 +151,6 @@ public class LevelFactory {
         entity.add(position);
         entity.add(texture);
         entity.add(type);
-
         engine.addEntity(entity);
         return entity;
     }
@@ -261,15 +256,28 @@ public class LevelFactory {
     }
 
     public void createAsteroid(Vector2 location) {
-        if (numAsteroids <= 20)
-            createAsteroid(location.x,location.y);
-        else
-            numAsteroids += 1;
+        replaceAsteroid();
+        if (engine.getEntitiesFor(Family.all(AsteroidComponent.class).get()).size() < 12) {
+            Gdx.app.log("Num Asteroids", String.valueOf(engine.getEntitiesFor(Family.all(AsteroidComponent.class).get()).size()));
+            createAsteroid(getAsteroidSpawn().x,getAsteroidSpawn().y);
+        }
+//        if (numAsteroids <= 10) {
+//            Gdx.app.log("Num Asteroids", String.valueOf(numAsteroids));
+//            createAsteroid(getAsteroidSpawn().x,getAsteroidSpawn().y);
+//            numAsteroids += 1;
+//        }
         this.level = this.parent.getHud().getScore();
         if (this.level % 7 == 0 && this.level > 0 && this.stars < 1) {
             createStar();
             this.level = 0;
         }
+    }
+
+    public void replaceAsteroid() {
+        if (engine.getEntitiesFor(Family.all(AsteroidComponent.class).get()).size()  < numAsteroids) {
+            createAsteroid(getAsteroidSpawn().x, getAsteroidSpawn().y);
+        }
+        Gdx.app.log("Num Asteroids Replace", String.valueOf(engine.getEntitiesFor(Family.all(AsteroidComponent.class).get()).size()));
     }
 
     private void createPlayer() {

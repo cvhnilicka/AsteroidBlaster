@@ -57,7 +57,7 @@ public class PlayScreen implements Screen {
         assetController = gameMaster.getAssetController();
 
         batch = new SpriteBatch();
-        RenderingSystem renderingSystem = new RenderingSystem(batch);
+        RenderingSystem renderingSystem = new RenderingSystem(batch, this);
         hud = new Hud(renderingSystem, batch);
         gamecam = renderingSystem.getCamera();
         batch.setProjectionMatrix(gamecam.combined);
@@ -70,12 +70,12 @@ public class PlayScreen implements Screen {
         // lets add the systems. they run in the order you add them
         engine.addSystem(new AnimationSystem());
         engine.addSystem(renderingSystem);
-        engine.addSystem(new PhysicsSystem(world, inputController, (PooledEngine)engine, levelFactory));
+        engine.addSystem(new PhysicsSystem(world, inputController, engine, levelFactory, this));
         engine.addSystem(new PhysicsDebugSystem(world, renderingSystem.getCamera()));
         engine.addSystem(new CollisionSystem(this));
         AsteroidSystem as = new AsteroidSystem(levelFactory);
         engine.addSystem(as);
-        engine.addSystem(new PlayerControlSystem(inputController, levelFactory, engine, hud));
+        engine.addSystem(new PlayerControlSystem(inputController, levelFactory, engine, hud, assetController));
         engine.addSystem(new BulletSystem(levelFactory.getPlayer()));
         engine.addSystem(new StarSystem(levelFactory));
 
@@ -90,6 +90,10 @@ public class PlayScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(inputController);
 
+    }
+
+    public void setGameOver() {
+        this.gameMaster.gameOver(this.hud.getScore());
     }
 
     public Hud getHud() { return this.hud; }
