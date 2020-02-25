@@ -46,14 +46,13 @@ public class AsteroidSystem extends IteratingSystem {
             asteroid.isDead = true;
         }
 
-//        float dist = asteroid.intialPos.dst(new Vector2(position.position.x, position.position.y));
-//        if (dist > 28) {
-//            position.position.set(asteroid.intialPos.x,asteroid.intialPos.y, 0);
-//            body.body.setTransform(new Vector2(asteroid.intialPos.x,asteroid.intialPos.y), body.body.getAngle());
-//
-//        }
-        if (asteroid.isDead) {
+        if (asteroid.isDead && !asteroid.wasShot) {
+            Gdx.app.log("REPLACE", "Natural causes");
             body.isDead = true;
+            lvlf.replaceAsteroid();
+        } else if (asteroid.isDead) {
+            body.isDead = true;
+            lvlf.createAsteroid(lvlf.getAsteroidSpawn());
         }
 
 

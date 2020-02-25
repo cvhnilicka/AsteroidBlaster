@@ -10,6 +10,7 @@ public class AsteroidComponent implements Component, Pool.Poolable {
     public  Vector2 intialPos = new Vector2();
     public boolean isDead = false;
     public float timeOffScreen = 0.f;
+    public boolean wasShot = false;
 
     @Override
     public void reset() {
@@ -17,6 +18,7 @@ public class AsteroidComponent implements Component, Pool.Poolable {
         intialPos = new Vector2();
         isDead = false;
         timeOffScreen = 0.f;
+        wasShot = false;
     }
 
 }

@@ -82,6 +82,7 @@ public class CollisionSystem extends IteratingSystem {
                         case TypeComponent.BULLET:
                             StateComponent asteroidState = ComponentMapper.getFor(StateComponent.class).get(entity);
                             asteroidState.set(StateComponent.ASTEROID_DEAD);
+                            asteroid.wasShot = true;
                             collidedEntity.getComponent(BulletComponent.class).isDead = true;
                             this.parent.getHud().addScore();
                             break;

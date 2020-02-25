@@ -101,7 +101,6 @@ public class PhysicsSystem extends IntervalIteratingSystem {
             if(bodyComp.isDead){
                 world.destroyBody(bodyComp.body);
                 engine.removeEntity(ent);
-                lvlf.createAsteroid(lvlf.getAsteroidSpawn());
             }
 
         }
