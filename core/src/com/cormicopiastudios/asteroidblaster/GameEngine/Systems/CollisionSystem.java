@@ -94,6 +94,22 @@ public class CollisionSystem extends IteratingSystem {
                     System.out.println("type == null");
                 }
             }
+        } else if (thisType.type == TypeComponent.BULLET) {
+            if (collidedEntity != null) {
+                TypeComponent collidedType = collidedEntity.getComponent(TypeComponent.class);
+
+                if (collidedType != null) {
+                    switch (collidedType.type) {
+                        case TypeComponent.ENEMY:
+                            Gdx.app.log("Collision", "Bullet w asteroid");
+                            StateComponent asteroidState = ComponentMapper.getFor(StateComponent.class).get(collidedEntity);
+                            asteroidState.set(StateComponent.ASTEROID_DEAD);
+                            collidedEntity.getComponent(AsteroidComponent.class).wasShot = true;
+                            entity.getComponent(BulletComponent.class).isDead = true;
+                            this.parent.getHud().addScore();
+                    }
+                }
+            }
         }
     }
 

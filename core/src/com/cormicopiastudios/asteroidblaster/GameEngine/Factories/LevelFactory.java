@@ -127,6 +127,8 @@ public class LevelFactory {
 
         b2dbody.body = bodyFactory.makeCirclePolyBody(x, y, 0.5f,
                 BodyFactory.FIXTURE_TYPE.STONE, BodyDef.BodyType.DynamicBody, true);
+//        b2dbody.body = bodyFactory.makeBoxPolyBody(x,y,.25f,.5f,
+//                BodyFactory.FIXTURE_TYPE.STEEL, BodyDef.BodyType.DynamicBody,false);
         b2dbody.body.setBullet(true); // increase physics computation to limit body travelling through other objects
         bodyFactory.makeAllFixturesSensors(b2dbody.body); // make bullets sensors so they don't move player
         position.position.set(x, y, 0);
@@ -237,6 +239,7 @@ public class LevelFactory {
         position.scale.x = 1f;
         position.scale.y = 1f;
         asteroid.speed = getLaunchSpeed(posx, posy);
+//        b2body.body.setAwake(true);
 
         entity.add(stateComponent);
         entity.add(animCom);
