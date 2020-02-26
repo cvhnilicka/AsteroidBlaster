@@ -90,8 +90,12 @@ public class PhysicsSystem extends IntervalIteratingSystem {
                     this.parent.setGameOver();
                 }
 
-            } else if (ent.getComponent(TypeComponent.class).type == TypeComponent.ENEMY) {
-                bodyComp.body.setLinearVelocity(ent.getComponent(AsteroidComponent.class).speed);
+            } else if (ent.getComponent(TypeComponent.class).type == TypeComponent.ENEMY &&
+                    Math.abs(bodyComp.body.getLinearVelocity().x) < Math.abs(ent.getComponent(AsteroidComponent.class).speed.x) &&
+                    Math.abs(bodyComp.body.getLinearVelocity().y) < Math.abs(ent.getComponent(AsteroidComponent.class).speed.y)
+            ) {
+                bodyComp.body.applyLinearImpulse(ent.getComponent(AsteroidComponent.class).speed, bodyComp.body.getWorldCenter(), true);
+//                bodyComp.body.setLinearVelocity(ent.getComponent(AsteroidComponent.class).speed);
             } else if (ent.getComponent(TypeComponent.class).type == TypeComponent.BULLET) {
                 bodyComp.body.setAngularVelocity(tfm.rotation);
             } else if (ent.getComponent(TypeComponent.class).type == TypeComponent.SHOOTINGSTAR) {
