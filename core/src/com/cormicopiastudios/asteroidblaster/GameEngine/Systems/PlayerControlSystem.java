@@ -52,7 +52,7 @@ public class PlayerControlSystem extends IteratingSystem {
         StateComponent state = sm.get(entity);
         PlayerComponent player = pm.get(entity);
 
-        
+
         int maxSpeed = 5;
         if(controller.left && b2body.body.getLinearVelocity().x > -maxSpeed){
             b2body.body.applyLinearImpulse(new Vector2(-.5f,0), b2body.body.getWorldCenter(), true);
@@ -90,7 +90,7 @@ public class PlayerControlSystem extends IteratingSystem {
                 Vector3 mPos = new Vector3(controller.mouseLocation.x, controller.mouseLocation.y, 0);
                 player.cam.unproject(mPos);
 
-                float speed = 15.f;
+                float speed = 7f;
                 float sx = b2body.body.getPosition().x;
                 float sy = b2body.body.getPosition().y;
                 float vx = mPos.x - sx;

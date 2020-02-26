@@ -332,7 +332,7 @@ public class LevelFactory {
     }
 
     public Vector2 getLaunchSpeed(float posx, float posy) {
-        float speed = 5f;
+        float speed = 2f;
         float velX = player.getComponent(TransformComponent.class).position.x-posx;
         float velY = player.getComponent(TransformComponent.class).position.y-posy;
 
