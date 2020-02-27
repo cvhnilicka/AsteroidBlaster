@@ -28,7 +28,7 @@ public class CollisionSystem extends IteratingSystem {
     @SuppressWarnings("unchecked")
     public CollisionSystem(PlayScreen parent) {
         // only need to worry about play collision for now
-        super (Family.all(CollisionComponent.class).get());
+        super(Family.all(CollisionComponent.class).get());
         this.parent = parent;
         cm = ComponentMapper.getFor(CollisionComponent.class);
         pm = ComponentMapper.getFor(PlayerComponent.class);
@@ -50,33 +50,34 @@ public class CollisionSystem extends IteratingSystem {
                 if (type != null) {
                     switch (type.type) {
                         case TypeComponent.ENEMY:
-                            entity.getComponent(B2BodyComponent.class).body.applyLinearImpulse(calculateBounce(entity,collidedEntity),
+                            entity.getComponent(B2BodyComponent.class).body.applyLinearImpulse(calculateBounce(entity, collidedEntity),
                                     entity.getComponent(B2BodyComponent.class).body.getWorldCenter(), true);
+                            entity.getComponent(PlayerComponent.class).health -= 1;
+                            this.parent.getHud().setHealth(entity.getComponent(PlayerComponent.class).health);
+                            if (entity.getComponent(PlayerComponent.class).health <= 0) {
+                                this.parent.setGameOver();
+                            }
                             break;
-                        case TypeComponent.SCENERY:
-                            break;
-                        case TypeComponent.OTHER:
-                            break;
-                            case TypeComponent.SHOOTINGSTAR:
-                                if (entity.getComponent(PlayerComponent.class).numStars < 3) {
-                                    entity.getComponent(PlayerComponent.class).numStars += 1;
-                                    this.parent.getHud().updateStars((int)entity.getComponent(PlayerComponent.class).numStars);
-                                }
-                                collidedEntity.getComponent(StarComponent.class).isDead = true;
+                        case TypeComponent.SHOOTINGSTAR:
+                            if (entity.getComponent(PlayerComponent.class).numStars < 3) {
+                                entity.getComponent(PlayerComponent.class).numStars += 1;
+                                this.parent.getHud().updateStars((int) entity.getComponent(PlayerComponent.class).numStars);
+                            }
+                            collidedEntity.getComponent(StarComponent.class).isDead = true;
                     }
                     cc.collisionEntity = null; // reset
                 }
             }
         } else if (thisType.type == TypeComponent.ENEMY) {
-            if(collidedEntity != null){
+            if (collidedEntity != null) {
                 AsteroidComponent asteroid = ComponentMapper.getFor(AsteroidComponent.class).get(entity);
                 TypeComponent type = collidedEntity.getComponent(TypeComponent.class);
-                if(type != null){
-                    switch(type.type){
+                if (type != null) {
+                    switch (type.type) {
                         case TypeComponent.ENEMY:
                             B2BodyComponent body = ComponentMapper.getFor(B2BodyComponent.class).get(entity);
-                            Vector2 newSpeedA = calculateReflection(collidedEntity,entity);
-                            collidedEntity.getComponent(AsteroidComponent.class).speed = calculateReflection(entity,collidedEntity);
+                            Vector2 newSpeedA = calculateReflection(collidedEntity, entity);
+                            collidedEntity.getComponent(AsteroidComponent.class).speed = calculateReflection(entity, collidedEntity);
                             asteroid.speed = newSpeedA;
                             break;
                         case TypeComponent.BULLET:
@@ -125,13 +126,13 @@ public class CollisionSystem extends IteratingSystem {
         Vector2 normal = new Vector2(-(collidedWTrans.position.y - playerTrans.position.y),
                 collidedWTrans.position.x - playerTrans.position.x);
 
-        float d = (float)Math.sqrt(normal.x*normal.x+normal.y*normal.y);
-        normal = new Vector2(normal.x/d,normal.y/d);
-        double velDot = Vector2.dot(normal.x,normal.y,playerBody.body.getLinearVelocity().x,
+        float d = (float) Math.sqrt(normal.x * normal.x + normal.y * normal.y);
+        normal = new Vector2(normal.x / d, normal.y / d);
+        double velDot = Vector2.dot(normal.x, normal.y, playerBody.body.getLinearVelocity().x,
                 playerBody.body.getLinearVelocity().y);
 
-        Vector2 reflectionVelocity = new Vector2(playerBody.body.getLinearVelocity().x-2*(float)velDot*normal.x,
-                playerBody.body.getLinearVelocity().y-2*(float)velDot*normal.y);
+        Vector2 reflectionVelocity = new Vector2(playerBody.body.getLinearVelocity().x - 2 * (float) velDot * normal.x,
+                playerBody.body.getLinearVelocity().y - 2 * (float) velDot * normal.y);
 
         return reflectionVelocity;
     }
@@ -148,13 +149,13 @@ public class CollisionSystem extends IteratingSystem {
         Vector2 normal = new Vector2(-(collidedWTrans.position.y - colliderTrans.position.y),
                 collidedWTrans.position.x - colliderTrans.position.x);
 
-        float d = (float)Math.sqrt(normal.x*normal.x+normal.y*normal.y);
-        normal = new Vector2(normal.x/d,normal.y/d);
-        double velDot = Vector2.dot(normal.x,normal.y,colliderAsteroid.speed.x,
+        float d = (float) Math.sqrt(normal.x * normal.x + normal.y * normal.y);
+        normal = new Vector2(normal.x / d, normal.y / d);
+        double velDot = Vector2.dot(normal.x, normal.y, colliderAsteroid.speed.x,
                 colliderAsteroid.speed.y);
 
-        Vector2 reflectionVelocity = new Vector2(colliderAsteroid.speed.x-2*(float)velDot*normal.x,
-                colliderAsteroid.speed.y-2*(float)velDot*normal.y);
+        Vector2 reflectionVelocity = new Vector2(colliderAsteroid.speed.x - 2 * (float) velDot * normal.x,
+                colliderAsteroid.speed.y - 2 * (float) velDot * normal.y);
 
         return reflectionVelocity;
     }
