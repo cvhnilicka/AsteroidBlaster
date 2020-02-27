@@ -47,7 +47,6 @@ public class AsteroidSystem extends IteratingSystem {
         }
 
         if (asteroid.isDead && !asteroid.wasShot) {
-            Gdx.app.log("REPLACE", "Natural causes");
             body.isDead = true;
             lvlf.replaceAsteroid();
         } else if (asteroid.isDead && asteroid.wasShot) {

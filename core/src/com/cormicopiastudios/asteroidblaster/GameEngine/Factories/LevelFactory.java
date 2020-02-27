@@ -268,8 +268,7 @@ public class LevelFactory {
         if (engine.getEntitiesFor(Family.all(AsteroidComponent.class).get()).size()  < 12) {
             createAsteroid(getAsteroidSpawn().x, getAsteroidSpawn().y);
         }
-        Gdx.app.log("Num Asteroids", String.valueOf(engine.getEntitiesFor(Family.all(AsteroidComponent.class).get()).size()));
-//        Gdx.app.log("Num Asteroid Int:", String.valueOf(numAsteroids));
+
     }
 
     private void createPlayer() {
