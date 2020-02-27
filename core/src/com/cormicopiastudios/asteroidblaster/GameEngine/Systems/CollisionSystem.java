@@ -75,9 +75,9 @@ public class CollisionSystem extends IteratingSystem {
                     switch(type.type){
                         case TypeComponent.ENEMY:
                             B2BodyComponent body = ComponentMapper.getFor(B2BodyComponent.class).get(entity);
-                            Vector2 vel = body.body.getLinearVelocity();
-                            asteroid.speed = calculateReflection(collidedEntity,entity);
+                            Vector2 newSpeedA = calculateReflection(collidedEntity,entity);
                             collidedEntity.getComponent(AsteroidComponent.class).speed = calculateReflection(entity,collidedEntity);
+                            asteroid.speed = newSpeedA;
                             break;
                         case TypeComponent.BULLET:
                             StateComponent asteroidState = ComponentMapper.getFor(StateComponent.class).get(entity);
@@ -92,6 +92,22 @@ public class CollisionSystem extends IteratingSystem {
                     cc.collisionEntity = null; // collision handled reset component
                 } else {
                     System.out.println("type == null");
+                }
+            }
+        } else if (thisType.type == TypeComponent.BULLET) {
+            if (collidedEntity != null) {
+                TypeComponent collidedType = collidedEntity.getComponent(TypeComponent.class);
+
+                if (collidedType != null) {
+                    switch (collidedType.type) {
+                        case TypeComponent.ENEMY:
+                            Gdx.app.log("Collision", "Bullet w asteroid");
+                            StateComponent asteroidState = ComponentMapper.getFor(StateComponent.class).get(collidedEntity);
+                            asteroidState.set(StateComponent.ASTEROID_DEAD);
+                            collidedEntity.getComponent(AsteroidComponent.class).wasShot = true;
+                            entity.getComponent(BulletComponent.class).isDead = true;
+                            this.parent.getHud().addScore();
+                    }
                 }
             }
         }

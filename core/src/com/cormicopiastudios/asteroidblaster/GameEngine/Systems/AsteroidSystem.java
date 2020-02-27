@@ -50,15 +50,15 @@ public class AsteroidSystem extends IteratingSystem {
             Gdx.app.log("REPLACE", "Natural causes");
             body.isDead = true;
             lvlf.replaceAsteroid();
-        } else if (asteroid.isDead) {
+        } else if (asteroid.isDead && asteroid.wasShot) {
             body.isDead = true;
             lvlf.createAsteroid(lvlf.getAsteroidSpawn());
+        } else if (asteroid.isDead && asteroid.starUsed) {
+            body.isDead = true;
+            lvlf.replaceAsteroid();
         }
 
 
     }
 
-    public void useStar() {
-
-    }
 }
