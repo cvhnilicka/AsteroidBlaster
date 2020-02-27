@@ -11,6 +11,7 @@ public class AsteroidComponent implements Component, Pool.Poolable {
     public boolean isDead = false;
     public float timeOffScreen = 0.f;
     public boolean wasShot = false;
+    public boolean starUsed = false;
 
     @Override
     public void reset() {
@@ -19,6 +20,7 @@ public class AsteroidComponent implements Component, Pool.Poolable {
         isDead = false;
         timeOffScreen = 0.f;
         wasShot = false;
+        starUsed = false;
     }
 
 }

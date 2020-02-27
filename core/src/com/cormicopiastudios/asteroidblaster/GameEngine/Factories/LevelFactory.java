@@ -51,6 +51,8 @@ public class LevelFactory {
 
     private String[] bucketMappings;
 
+    private Array<Entity> roids;
+
     private ObjectMap<Integer, Array<Entity>> asteroidBuckets;
 
     public LevelFactory(World world, PooledEngine en, PlayScreen parent) {
@@ -69,6 +71,7 @@ public class LevelFactory {
         this.screenYMax = this.parent.getGamecam().viewportHeight;
         numAsteroids = 0;
         stars = 0;
+        roids = new Array<Entity>();
         createPlayer();
         initialAsteroids();
         createStar();
@@ -89,7 +92,6 @@ public class LevelFactory {
         createAsteroid(getAsteroidSpawn().x, getAsteroidSpawn().y);
         createAsteroid(getAsteroidSpawn().x, getAsteroidSpawn().y);
         createAsteroid(getAsteroidSpawn().x, getAsteroidSpawn().y);
-        numAsteroids = 3;
 
     }
 
@@ -98,20 +100,10 @@ public class LevelFactory {
         int offsetCounter = 0;
         for (int i = 0; i < 360;  i++) {
             if (offsetCounter < offset) {
-//                this.bucketMappings[i] =
             }
         }
     }
 
-    /**
-     * I will need to add the code for adding in:
-     * - Asteroids
-     * - Walls
-     * - Shooting Stars
-     * */
-    // TODO private void addAsteroid()
-    // TODO private void addShootingStar()
-    // TODO private void addWalls()
 
 
     public Entity createBullet(float x, float y, float xVel, float yVel, Vector3 mPos) {
@@ -127,8 +119,6 @@ public class LevelFactory {
 
         b2dbody.body = bodyFactory.makeCirclePolyBody(x, y, 0.5f,
                 BodyFactory.FIXTURE_TYPE.STONE, BodyDef.BodyType.DynamicBody, true);
-//        b2dbody.body = bodyFactory.makeBoxPolyBody(x,y,.25f,.5f,
-//                BodyFactory.FIXTURE_TYPE.STEEL, BodyDef.BodyType.DynamicBody,false);
         b2dbody.body.setBullet(true); // increase physics computation to limit body travelling through other objects
         bodyFactory.makeAllFixturesSensors(b2dbody.body); // make bullets sensors so they don't move player
         position.position.set(x, y, 0);
@@ -251,24 +241,22 @@ public class LevelFactory {
         entity.add(collision);
 
         engine.addEntity(entity);
+        numAsteroids += 1;
 
     }
 
     public void removeStar() {
         this.stars -= 1;
     }
+    public void removeAsteroid() {
+        this.numAsteroids -= 1;
+    }
 
     public void createAsteroid(Vector2 location) {
         replaceAsteroid();
         if (engine.getEntitiesFor(Family.all(AsteroidComponent.class).get()).size() < 12) {
-            Gdx.app.log("Num Asteroids", String.valueOf(engine.getEntitiesFor(Family.all(AsteroidComponent.class).get()).size()));
             createAsteroid(getAsteroidSpawn().x,getAsteroidSpawn().y);
         }
-//        if (numAsteroids <= 10) {
-//            Gdx.app.log("Num Asteroids", String.valueOf(numAsteroids));
-//            createAsteroid(getAsteroidSpawn().x,getAsteroidSpawn().y);
-//            numAsteroids += 1;
-//        }
         this.level = this.parent.getHud().getScore();
         if (this.level % 7 == 0 && this.level > 0 && this.stars < 1) {
             createStar();
@@ -277,10 +265,11 @@ public class LevelFactory {
     }
 
     public void replaceAsteroid() {
-        if (engine.getEntitiesFor(Family.all(AsteroidComponent.class).get()).size()  < numAsteroids) {
+        if (engine.getEntitiesFor(Family.all(AsteroidComponent.class).get()).size()  < 12) {
             createAsteroid(getAsteroidSpawn().x, getAsteroidSpawn().y);
         }
-        Gdx.app.log("Num Asteroids Replace", String.valueOf(engine.getEntitiesFor(Family.all(AsteroidComponent.class).get()).size()));
+        Gdx.app.log("Num Asteroids", String.valueOf(engine.getEntitiesFor(Family.all(AsteroidComponent.class).get()).size()));
+//        Gdx.app.log("Num Asteroid Int:", String.valueOf(numAsteroids));
     }
 
     private void createPlayer() {
@@ -335,7 +324,7 @@ public class LevelFactory {
     }
 
     public Vector2 getLaunchSpeed(float posx, float posy) {
-        float speed = 2f;
+        float speed = 5f;
         float velX = player.getComponent(TransformComponent.class).position.x-posx;
         float velY = player.getComponent(TransformComponent.class).position.y-posy;
 
@@ -379,8 +368,6 @@ public class LevelFactory {
         return getObjectSpawn();
     }
 
-    // TODO updateLevel()
-    // TODO getLevel()
 
 
 }

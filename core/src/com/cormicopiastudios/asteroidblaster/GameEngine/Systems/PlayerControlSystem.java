@@ -76,6 +76,7 @@ public class PlayerControlSystem extends IteratingSystem {
             player.timeSinceLastStar = player.starDelay;
             for (Entity roid : en.getEntitiesFor(Family.all(AsteroidComponent.class).get())) {
                 sm.get(roid).set(StateComponent.ASTEROID_DEAD);
+                roid.getComponent(AsteroidComponent.class).starUsed = true;
             }
             player.numStars -= 1;
             hud.updateStars((int)player.numStars);
@@ -90,7 +91,7 @@ public class PlayerControlSystem extends IteratingSystem {
                 Vector3 mPos = new Vector3(controller.mouseLocation.x, controller.mouseLocation.y, 0);
                 player.cam.unproject(mPos);
 
-                float speed = 7f;
+                float speed = 15f;
                 float sx = b2body.body.getPosition().x;
                 float sy = b2body.body.getPosition().y;
                 float vx = mPos.x - sx;

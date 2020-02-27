@@ -75,9 +75,9 @@ public class CollisionSystem extends IteratingSystem {
                     switch(type.type){
                         case TypeComponent.ENEMY:
                             B2BodyComponent body = ComponentMapper.getFor(B2BodyComponent.class).get(entity);
-                            Vector2 vel = body.body.getLinearVelocity();
-                            asteroid.speed = calculateReflection(collidedEntity,entity);
+                            Vector2 newSpeedA = calculateReflection(collidedEntity,entity);
                             collidedEntity.getComponent(AsteroidComponent.class).speed = calculateReflection(entity,collidedEntity);
+                            asteroid.speed = newSpeedA;
                             break;
                         case TypeComponent.BULLET:
                             StateComponent asteroidState = ComponentMapper.getFor(StateComponent.class).get(entity);
