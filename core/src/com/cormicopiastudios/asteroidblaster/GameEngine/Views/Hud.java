@@ -85,6 +85,7 @@ public class Hud implements Disposable {
 
     public void setHealth(int health) {
         this.health = health;
+        this.healthHolderLabel.setText(health);
     }
 
     public int getScore() {
