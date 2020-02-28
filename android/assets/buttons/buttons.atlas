@@ -1,0 +1,89 @@
+
+buttons.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+GameOver
+  rotate: false
+  xy: 1, 19
+  size: 64, 32
+  orig: 64, 32
+  offset: 0, 0
+  index: -1
+NewGameBtn
+  rotate: false
+  xy: 67, 19
+  size: 64, 32
+  orig: 64, 32
+  offset: 0, 0
+  index: -1
+eight
+  rotate: false
+  xy: 1, 1
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+five
+  rotate: false
+  xy: 133, 35
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+four
+  rotate: false
+  xy: 19, 1
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+nine
+  rotate: false
+  xy: 151, 35
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+one
+  rotate: false
+  xy: 37, 1
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+seven
+  rotate: false
+  xy: 169, 35
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+six
+  rotate: false
+  xy: 55, 1
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+three
+  rotate: false
+  xy: 187, 35
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+two
+  rotate: false
+  xy: 73, 1
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+zero
+  rotate: false
+  xy: 205, 35
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
