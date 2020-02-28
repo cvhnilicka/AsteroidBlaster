@@ -17,8 +17,6 @@ public class AssetController {
     public final String asteroid = "asteroid.png";
     public final String leftWall = "LeftRocks.png";
     public final String rightWall = "RightRocks.png";
-    public final String star_background = "star_background1.png";
-    public final String plain_background = "background.png";
     public final String flameAsteroid = "flaming_asteroid.png";
     public final String bullet = "bulletv1.png";
 
@@ -30,26 +28,8 @@ public class AssetController {
     public final String newGamePix = "buttons/newgame.atlas";
     public final String arrowPix = "arrow/arrow.atlas";
     public final String backgroundPix = "background/background.atlas";
+    public final String buttonsPix = "buttons/buttons.atlas";
 
-
-    // numbers
-    public final String one = "Numbers/one_norm.png";
-    public final String two = "Numbers/two_norm.png";
-    public final String three = "Numbers/three_norm.png";
-    public final String four = "Numbers/four_norm.png";
-    public final String five = "Numbers/five_norm.png";
-    public final String six = "Numbers/six_norm.png";
-    public final String seven = "Numbers/seven_norm.png";
-    public final String eight = "Numbers/eight_norm.png";
-    public final String nine = "Numbers/nine_norm.png";
-    public final String zero = "Numbers/zero_norm.png";
-
-    // buttons
-    public final String newgame = "buttons/newgame.png";
-    public final String leaderboard = "buttons/leaderboard.png";
-    public final String exit = "buttons/exit.png";
-    public final String returnButton = "buttons/return.png";
-    public final String preferences = "buttons/preferences.png";
 
 
     public void queueAddImages() {
@@ -65,25 +45,7 @@ public class AssetController {
     }
 
     public void queueMenuButtons(){
-        manager.load(star_background, Texture.class);
-        manager.load(plain_background, Texture.class);
-        manager.load(newgame, Texture.class);
-        manager.load(leaderboard, Texture.class);
-        manager.load(exit, Texture.class);
-        manager.load(returnButton, Texture.class);
-        manager.load(preferences, Texture.class);
 
-
-        manager.load(one, Texture.class);
-        manager.load(two, Texture.class);
-        manager.load(three, Texture.class);
-        manager.load(four, Texture.class);
-        manager.load(five, Texture.class);
-        manager.load(six, Texture.class);
-        manager.load(seven, Texture.class);
-        manager.load(eight, Texture.class);
-        manager.load(nine, Texture.class);
-        manager.load(zero, Texture.class);
 
         manager.load(whiteShip, Texture.class);
         manager.load(redShip, Texture.class);
@@ -94,6 +56,7 @@ public class AssetController {
         manager.load(newGamePix, TextureAtlas.class);
         manager.load(arrowPix, TextureAtlas.class);
         manager.load(backgroundPix, TextureAtlas.class);
+        manager.load(buttonsPix, TextureAtlas.class);
 
 
 

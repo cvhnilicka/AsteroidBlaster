@@ -40,7 +40,7 @@ public class MainMenu implements Screen {
     public MainMenu(AsteroidBlaster parent) {
         this.parent = parent;
         stage = new Stage(new ScreenViewport());
-        this.atlas = parent.getAssetController().manager.get(parent.getAssetController().newGamePix,
+        this.atlas = parent.getAssetController().manager.get(parent.getAssetController().buttonsPix,
                 TextureAtlas.class);
         this.backgroundAtlas = parent.getAssetController().manager.get(
                 parent.getAssetController().backgroundPix, TextureAtlas.class);
@@ -76,7 +76,6 @@ public class MainMenu implements Screen {
         TextButton preferences = new TextButton("Preferences", skin);
         TextButton exit = new TextButton("Exit", skin);
 
-//        table.add(newGame).height(Value.percentHeight(0.20f, table)).fillX().uniform();
         table.add(newGame).width(Value.percentWidth(0.4f, table)).fillX().uniform();
         table.row().pad(10,0,10,0);
         table.add(preferences).height(Value.percentHeight(0.20f, table)).fillX().uniform();

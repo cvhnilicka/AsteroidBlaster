@@ -48,7 +48,7 @@ public class AsteroidBlaster extends Game {
 	}
 
 	public void gameOverScreen(int score) {
-		if (gameOver == null) gameOver = new GameOver(score);
+		if (gameOver == null) gameOver = new GameOver(score, assetController);
 		this.setScreen(gameOver);
 	}
 
