@@ -42,13 +42,13 @@ public class AsteroidBlaster extends Game {
 			case MAINMENU: if (mainMenu == null) mainMenu = new MainMenu(this);
 			this.setScreen(mainMenu);
 			break;
-			case GAME: if (gameMaster == null) gameMaster = new GameMaster(this);
+			case GAME: gameMaster = new GameMaster(this);
 			break;
 		}
 	}
 
 	public void gameOverScreen(int score) {
-		if (gameOver == null) gameOver = new GameOver(score);
+		gameOver = new GameOver(score, assetController, this);
 		this.setScreen(gameOver);
 	}
 
