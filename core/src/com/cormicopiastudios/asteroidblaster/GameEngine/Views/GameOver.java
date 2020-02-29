@@ -9,14 +9,18 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.cormicopiastudios.asteroidblaster.AsteroidBlaster;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.AssetController;
 
 import java.util.Collections;
@@ -35,14 +39,16 @@ public class GameOver implements Screen {
     private Animation backgroundAnim;
     float stateTime;
     SpriteBatch spriteBatch;
+    private AsteroidBlaster parent;
 
-    public GameOver(int score, AssetController assetController) {
+    public GameOver(int score, AssetController assetController, AsteroidBlaster parent) {
         stage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("skin/shade/uiskin.json"));
         this.assetController = assetController;
         btnAtlas = assetController.manager.get(assetController.buttonsPix, TextureAtlas.class);
         backgroundAtlas = assetController.manager.get(assetController.backgroundPix, TextureAtlas.class);
         scoreSetup(score);
+        this.parent = parent;
         this.backgroundAnim = new Animation(0.1f, backgroundAtlas.findRegions("Background"));
         backgroundAnim.setPlayMode(Animation.PlayMode.LOOP);
         Gdx.app.log("Game Over screen", String.valueOf(score));
@@ -54,19 +60,45 @@ public class GameOver implements Screen {
         spriteBatch = new SpriteBatch();
         stage.clear();
         Gdx.input.setInputProcessor(stage);
-        Label gameOver = new Label("Game Over", skin);
+        scoreSetup(this.score);
+
+        Image gameOverImage = new Image();
+        TextureRegionDrawable dr = new TextureRegionDrawable(btnAtlas.findRegion("GameOver"));
+        dr.setMinSize(150,75);
+        gameOverImage.setDrawable(dr);
+
+
+        TextureRegionDrawable ret = new TextureRegionDrawable(btnAtlas.findRegion("return"));
+        ret.setMinSize(150,75);
+        ImageButton returnBtn = new ImageButton(ret);
 
         Table table = new Table();
+        Table scoreTable = new Table();
+
+        scoreTable.add(scoreTextures[3]).uniform();
+        scoreTable.add(scoreTextures[2]).uniform();
+        scoreTable.add(scoreTextures[1]).uniform();
+        scoreTable.add(scoreTextures[0]).uniform();
+
+
+
+        table.setDebug(true);
         table.setFillParent(true);
-        table.add(gameOver);
+        table.add(gameOverImage);
         table.row();
-        table.add(scoreTextures[3]).expandX();
-        table.add(scoreTextures[2]).expandX();
-        table.add(scoreTextures[1]).expandX();
-        table.add(scoreTextures[0]).expandX();
+        table.add(scoreTable).padTop(10);
+        table.row();
+        table.add(returnBtn);
         table.row();
 
         stage.addActor(table);
+
+        returnBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                parent.changeScreen(AsteroidBlaster.MAINMENU);
+            }
+        });
 
 
     }
@@ -75,8 +107,11 @@ public class GameOver implements Screen {
         scoreTextures = new Image[4];
 
         for (int j = 0; j < scoreTextures.length; j ++) {
-            scoreTextures[j] = new Image();
+            TextureRegionDrawable dr = new TextureRegionDrawable(btnAtlas.findRegion("zero"));
+            dr.setMinSize(25,25);
+            scoreTextures[j] = new Image(dr);
         }
+
 
         this.score = score;
         LinkedList<Integer> digits = new LinkedList<>();
@@ -114,7 +149,7 @@ public class GameOver implements Screen {
                     break;
                     default: dr.setRegion(btnAtlas.findRegion("zero"));
             }
-            dr.setMinSize(100,66);
+            dr.setMinSize(25,25);
             scoreTextures[i-1].setDrawable(dr);
             i--;
         }
