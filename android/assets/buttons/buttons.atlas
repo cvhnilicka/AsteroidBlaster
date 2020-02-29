@@ -10,16 +10,23 @@ GameOver
   orig: 64, 32
   offset: 0, 0
   index: -1
-NewGameBtn
+instructionsBtn
   rotate: false
   xy: 67, 19
   size: 64, 32
   orig: 64, 32
   offset: 0, 0
   index: -1
-return
+NewGameBtn
   rotate: false
   xy: 133, 19
+  size: 64, 32
+  orig: 64, 32
+  offset: 0, 0
+  index: -1
+return
+  rotate: false
+  xy: 199, 19
   size: 64, 32
   orig: 64, 32
   offset: 0, 0
@@ -33,7 +40,7 @@ eight
   index: -1
 five
   rotate: false
-  xy: 199, 35
+  xy: 265, 35
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -47,7 +54,7 @@ four
   index: -1
 nine
   rotate: false
-  xy: 217, 35
+  xy: 283, 35
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -61,7 +68,7 @@ one
   index: -1
 seven
   rotate: false
-  xy: 235, 35
+  xy: 301, 35
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -75,21 +82,21 @@ six
   index: -1
 three
   rotate: false
-  xy: 73, 1
+  xy: 319, 35
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 two
   rotate: false
-  xy: 91, 1
+  xy: 73, 1
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 zero
   rotate: false
-  xy: 109, 1
+  xy: 337, 35
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

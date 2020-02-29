@@ -4,46 +4,40 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.cormicopiastudios.asteroidblaster.AsteroidBlaster;
 
-public class MainMenu implements Screen {
+public class Instructions implements Screen {
     private AsteroidBlaster parent;
     private Stage stage;
-    private Skin skin; // will temp use a skin
 
     private TextureAtlas atlas;
     private TextureAtlas backgroundAtlas;
-
-    private TextureRegion background;
-    private Sprite drawBackground;
+    private TextureAtlas btnAtlas;
 
     SpriteBatch spriteBatch;
     float stateTime;
 
-
     private Animation backgroundAnim;
 
-    public MainMenu(AsteroidBlaster parent) {
+
+    public Instructions(AsteroidBlaster parent) {
         this.parent = parent;
         stage = new Stage(new ScreenViewport());
-        this.atlas = parent.getAssetController().manager.get(parent.getAssetController().buttonsPix,
-                TextureAtlas.class);
+        this.atlas = this.parent.getAssetController().manager.get(parent.getAssetController().instructionsPix, TextureAtlas.class);
         this.backgroundAtlas = parent.getAssetController().manager.get(
                 parent.getAssetController().backgroundPix, TextureAtlas.class);
+        this.btnAtlas = this.parent.getAssetController().manager.get(this.parent.getAssetController().buttonsPix, TextureAtlas.class);
 
         this.backgroundAnim = new Animation(0.1f, backgroundAtlas.findRegions("Background"));
         backgroundAnim.setPlayMode(Animation.PlayMode.LOOP);
@@ -51,6 +45,7 @@ public class MainMenu implements Screen {
 
     @Override
     public void show() {
+
         stage.clear();
         // set as input
         spriteBatch = new SpriteBatch();
@@ -62,54 +57,29 @@ public class MainMenu implements Screen {
 
         Table table = new Table(); // table for menu
         table.setFillParent(true);
-        if (parent.debugmode == true)
-            table.setDebug(true);
 
         stage.addActor(table);
 
-        skin = new Skin(Gdx.files.internal("skin/shade/uiskin.json"));
+        TextureRegionDrawable instDr = new TextureRegionDrawable(atlas.findRegion("instructionsScreen"));
+        instDr.setMinSize(650,650);
+        Image instImag = new Image(instDr);
 
-//        TextButton newGame = new TextButton("New Game", skin);
-        TextureRegionDrawable dr = new TextureRegionDrawable(atlas.findRegion("NewGameBtn"));
-        dr.setMinSize(350,150);
-        ImageButton newGame = new ImageButton(dr);
+        table.add(instImag);
 
-        TextureRegionDrawable instBtn = new TextureRegionDrawable(atlas.findRegion("instructionsBtn"));
-        instBtn.setMinSize(350,150);
+        TextureRegionDrawable ret = new TextureRegionDrawable(btnAtlas.findRegion("return"));
+        ret.setMinSize(150,75);
+        ImageButton returnBtn = new ImageButton(ret);
 
-        ImageButton instructions = new ImageButton(instBtn);
+        table.row();
+        table.add(returnBtn);
 
-//        TextButton instructions = new TextButton("Instructions", skin);
-        TextButton exit = new TextButton("Exit", skin);
 
-        table.add(newGame).fillX().uniform();
-        table.row().pad(10,0,10,0);
-        table.add(instructions).fillX().uniform();
-        table.row().pad(10,0,10,0);
-//        table.add(exit).height(Value.percentHeight(0.20f, table)).fillX().uniform();
-
-        newGame.addListener(new ChangeListener() {
+        returnBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                parent.changeScreen(AsteroidBlaster.GAME);
+                parent.changeScreen(AsteroidBlaster.MAINMENU);
             }
         });
-
-        instructions.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                parent.changeScreen(AsteroidBlaster.INSTRUCTIONS);
-            }
-        });
-
-//        exit.addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ChangeEvent event, Actor actor) {
-////                parent.changeScreen(AsteroidBlaster.EXIT);
-//            }
-//        });
-
-
 
     }
 
@@ -119,7 +89,7 @@ public class MainMenu implements Screen {
         // this is to prevent 'flickering' or 'ghosting'
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        // Actually render the scene you described in the show() method above.
+
         TextureRegion toDraw = (TextureRegion)backgroundAnim.getKeyFrame(stateTime, true);
 
 
@@ -128,9 +98,9 @@ public class MainMenu implements Screen {
 
         spriteBatch.draw(toDraw,0,0,stage.getWidth(),stage.getHeight());
         spriteBatch.end();
+        // Actually render the scene you described in the show() method above.
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-
     }
 
     @Override
