@@ -29,6 +29,7 @@ public class AssetController {
     public final String arrowPix = "arrow/arrow.atlas";
     public final String backgroundPix = "background/background.atlas";
     public final String buttonsPix = "buttons/buttons.atlas";
+    public final String instructionsPix = "instructions/instructions.atlas";
 
 
 
@@ -57,6 +58,7 @@ public class AssetController {
         manager.load(arrowPix, TextureAtlas.class);
         manager.load(backgroundPix, TextureAtlas.class);
         manager.load(buttonsPix, TextureAtlas.class);
+        manager.load(instructionsPix, TextureAtlas.class);
 
 
 

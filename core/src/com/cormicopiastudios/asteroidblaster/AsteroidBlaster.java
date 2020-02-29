@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Controllers.AssetController;
 import com.cormicopiastudios.asteroidblaster.GameEngine.GameMaster;
 import com.cormicopiastudios.asteroidblaster.GameEngine.Views.GameOver;
+import com.cormicopiastudios.asteroidblaster.Menus.Instructions;
 import com.cormicopiastudios.asteroidblaster.Menus.LoadingScreen;
 import com.cormicopiastudios.asteroidblaster.Menus.MainMenu;
 
@@ -30,6 +31,9 @@ public class AsteroidBlaster extends Game {
 	private GameOver gameOver;
 	public final static int GAMEOVER = 4;
 
+	private Instructions instructions;
+	public final static int INSTRUCTIONS = 5;
+
 	private AssetController assetController;
 
 
@@ -43,6 +47,9 @@ public class AsteroidBlaster extends Game {
 			this.setScreen(mainMenu);
 			break;
 			case GAME: gameMaster = new GameMaster(this);
+			break;
+			case INSTRUCTIONS: instructions = new Instructions(this);
+			this.setScreen(instructions);
 			break;
 		}
 	}
