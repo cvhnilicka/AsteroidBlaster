@@ -71,14 +71,20 @@ public class MainMenu implements Screen {
 
 //        TextButton newGame = new TextButton("New Game", skin);
         TextureRegionDrawable dr = new TextureRegionDrawable(atlas.findRegion("NewGameBtn"));
-        dr.setMinSize(200,150);
+        dr.setMinSize(350,150);
         ImageButton newGame = new ImageButton(dr);
-        TextButton instructions = new TextButton("Instructions", skin);
+
+        TextureRegionDrawable instBtn = new TextureRegionDrawable(atlas.findRegion("instructionsBtn"));
+        instBtn.setMinSize(350,150);
+
+        ImageButton instructions = new ImageButton(instBtn);
+
+//        TextButton instructions = new TextButton("Instructions", skin);
         TextButton exit = new TextButton("Exit", skin);
 
-        table.add(newGame).width(Value.percentWidth(0.4f, table)).fillX().uniform();
+        table.add(newGame).fillX().uniform();
         table.row().pad(10,0,10,0);
-        table.add(instructions).height(Value.percentHeight(0.20f, table)).fillX().uniform();
+        table.add(instructions).fillX().uniform();
         table.row().pad(10,0,10,0);
 //        table.add(exit).height(Value.percentHeight(0.20f, table)).fillX().uniform();
 
